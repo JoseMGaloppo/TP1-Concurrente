@@ -14,4 +14,29 @@ public class Casillero {
         this.pedido = null;
     }
 
+    public boolean isDisponible() {
+        if(this.estado == EstadoCasillero.VACIO) {
+            return true;
+        }
+        return false;
+    }
+
+    public void setOcupado() {
+        this.estado = EstadoCasillero.OCUPADO;
+    }
+
+    public void setFueraDeServicio() {
+        this.estado = EstadoCasillero.FUERADESERVICIO;
+    }
+
+    public void ocupar(Pedido pedido) {
+        this.pedido = pedido;
+        this.contadorOcupado++;
+    }
+
+    public Pedido liberar() {
+        Pedido ped = this.pedido;
+        this.pedido = null;
+        return ped;
+    }
 }

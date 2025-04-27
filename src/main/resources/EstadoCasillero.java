@@ -1,3 +1,5 @@
+package main.resources;
+
 public enum EstadoCasillero {
     VACIO("Vacio"),
     OCUPADO("Ocupado"),

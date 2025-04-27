@@ -15,10 +15,7 @@ public class Casillero {
     }
 
     public boolean isDisponible() {
-        if(this.estado == EstadoCasillero.VACIO) {
-            return true;
-        }
-        return false;
+        return this.estado == EstadoCasillero.VACIO;
     }
 
     public void setOcupado() {
@@ -29,14 +26,18 @@ public class Casillero {
         this.estado = EstadoCasillero.FUERADESERVICIO;
     }
 
-    public void ocupar(Pedido pedido) {
-        this.pedido = pedido;
-        this.contadorOcupado++;
+    public synchronized void ocupar(Pedido pedido) {
+
+        if (isDisponible()) {
+            this.pedido = pedido;
+            this.contadorOcupado++;
+        }
+
     }
 
-    public Pedido liberar() {
-        Pedido ped = this.pedido;
+    public synchronized Pedido desocupar() {
+        Pedido pedido = this.pedido;
         this.pedido = null;
-        return ped;
+        return pedido;
     }
 }

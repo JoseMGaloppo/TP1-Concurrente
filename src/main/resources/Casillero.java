@@ -31,6 +31,7 @@ public class Casillero {
 
     public void ocupar(Pedido pedido) {
         this.pedido = pedido;
+        this.contadorOcupado++;
     }
 
     public Pedido liberar() {

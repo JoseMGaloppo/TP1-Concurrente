@@ -14,4 +14,15 @@ public class Casillero {
         this.pedido = null;
     }
 
+    public EstadoCasillero getEstado() {
+        return estado;
+    }
+
+    public void setOcupado() {
+        this.estado = EstadoCasillero.OCUPADO;
+    }
+
+    public void setFueraDeServicio() {
+        this.estado = EstadoCasillero.FUERADESERVICIO;
+    }
 }

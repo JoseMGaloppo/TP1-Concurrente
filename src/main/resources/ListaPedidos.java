@@ -18,7 +18,7 @@ public class ListaPedidos {
     public synchronized Pedido tomarPedido() {
         if (!listaDePedidos.isEmpty()) {
             // Saca el primer pedido de la lista
-            return listaDePedidos.remove(0);
+            return listaDePedidos.removeFirst();
         } else {
             return null; // No quedan pedidos
         }

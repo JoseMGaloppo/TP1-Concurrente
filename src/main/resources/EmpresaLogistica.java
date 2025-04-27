@@ -6,20 +6,32 @@ public class EmpresaLogistica {
 
     private Casillero[][] casilleros;
     private RegistroPedidos registrosPedidos;
+    private ListaPedidos listaPedidos;
 
     public EmpresaLogistica() {
         casilleros = new Casillero[20][10];
         registrosPedidos = new RegistroPedidos();
+        listaPedidos = new ListaPedidos();
+
+        //Creo e instancio los casilleros de la matriz casilleros
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 10; j++) {
+                casilleros[i][j] = new Casillero();
+            }
+        }
+
     }
 
     // Métodos para el proceso 1
-    /* Este proceso se encarga de recibir los pedidos de los usuarios. Se
+    /**
+     * Este proceso se encarga de recibir los pedidos de los usuarios. Se
     tienen tres hilos que ejecutan este proceso. Cada hilo intenta seleccionar un casillero
     aleatorio en la matriz, verificando que esté disponible. Si el casillero no está vacío, el hilo
     debe buscar otro casillero que sí lo esté. Una vez ocupado el casillero, el mismo se marca
-    como ocupado y se registra el pedido en el registro de pedidos en preparación. */
+    como ocupado y se registra el pedido en el registro de pedidos en preparación.
+     */
 
-    public Casillero recorrerCasilleros() {
+    public Casillero getCasilleroDisponible() {
         Random random = new Random();
         int i = 0, j = 0;
         while(true) {
@@ -33,6 +45,14 @@ public class EmpresaLogistica {
                 return casi;
             }
         }
+    }
+
+    public Casillero[][] getCasilleros() {
+        return casilleros;
+    }
+
+    public ListaPedidos getListaPedidos() {
+        return listaPedidos;
     }
 
     // Métodos para el proceso 2

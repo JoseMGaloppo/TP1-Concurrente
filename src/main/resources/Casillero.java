@@ -6,19 +6,19 @@ public class Casillero {
     private int contadorOcupado;
     private Pedido pedido;
     // Llaves para secciones criticas
-    // private final Object llave1, llave2;
+    private final Object llave1, llave2;
+
 
     public Casillero() {
         this.estado = EstadoCasillero.VACIO;
         this.contadorOcupado = 0;
         this.pedido = null;
+        llave1 = new Object();
+        llave2 = new Object();
     }
 
     public boolean isDisponible() {
-        if(this.estado == EstadoCasillero.VACIO) {
-            return true;
-        }
-        return false;
+        return this.estado == EstadoCasillero.VACIO;
     }
 
     public void setOcupado() {
@@ -30,13 +30,20 @@ public class Casillero {
     }
 
     public void ocupar(Pedido pedido) {
-        this.pedido = pedido;
-        this.contadorOcupado++;
+        synchronized(llave1) {
+            if (isDisponible()) {
+                this.pedido = pedido;
+                this.contadorOcupado++;
+            }
+        }
+
     }
 
-    public Pedido liberar() {
-        Pedido ped = this.pedido;
-        this.pedido = null;
-        return ped;
+    public Pedido desocupar() {
+        synchronized (llave2) {
+            Pedido pedido = this.pedido;
+            this.pedido = null;
+            return pedido;
+        }
     }
 }

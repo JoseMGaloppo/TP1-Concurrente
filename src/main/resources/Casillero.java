@@ -14,8 +14,11 @@ public class Casillero {
         this.pedido = null;
     }
 
-    public EstadoCasillero getEstado() {
-        return estado;
+    public boolean isDisponible() {
+        if(this.estado == EstadoCasillero.VACIO) {
+            return true;
+        }
+        return false;
     }
 
     public void setOcupado() {
@@ -24,5 +27,15 @@ public class Casillero {
 
     public void setFueraDeServicio() {
         this.estado = EstadoCasillero.FUERADESERVICIO;
+    }
+
+    public void ocupar(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
+    public Pedido liberar() {
+        Pedido ped = this.pedido;
+        this.pedido = null;
+        return ped;
     }
 }

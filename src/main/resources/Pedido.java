@@ -9,4 +9,8 @@ public class Pedido {
         this.estado = estado;
         this.procesado = false;
     }
+
+    public EstadoPedido getEstado() {
+        return this.estado;
+    }
 }

@@ -11,7 +11,7 @@ public class EmpresaLogistica {
         casilleros = new Casillero[20][10];
         registrosPedidos = new RegistroPedidos();
     }
-    
+
     // Métodos para el proceso 1
     /* Este proceso se encarga de recibir los pedidos de los usuarios. Se
     tienen tres hilos que ejecutan este proceso. Cada hilo intenta seleccionar un casillero
@@ -26,7 +26,7 @@ public class EmpresaLogistica {
             i = random.nextInt(10); // fila aleatoria (0-9)
             j = random.nextInt(20); // columna aleatoria (0-19)
             Casillero casi = casilleros[i][j];
-            if(casi.getEstado() == EstadoCasillero.VACIO) {
+            if(casi.isDisponible()) {
                 //Aca habria que ver si conviene retornar el Casillero, o hacerlo un void y simplemente
                 // modificar el casillero y no devolver nada.
                 casi.setOcupado(); //Falta setear el pedido dentro de esta casillero

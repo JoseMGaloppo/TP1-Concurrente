@@ -3,13 +3,15 @@ package main.resources;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaPedidos {
+public class GeneradorPedidos {
     private List<Pedido> listaDePedidos;
+    private final int cantidadPedidos;
 
-    public ListaPedidos() {
+    public GeneradorPedidos() {
         listaDePedidos = new ArrayList<>();
-        // Llenar con 200 pedidos
-        for (int i = 1; i <= 200; i++) {
+        this.cantidadPedidos = 500;
+        // Llenar con 500 pedidos
+        for (int i = 1; i <= 500; i++) {
             listaDePedidos.add(new Pedido(EstadoPedido.EN_PREPARACION));
         }
     }

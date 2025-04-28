@@ -1,7 +1,7 @@
 package main.threads;
 
 import main.resources.EmpresaLogistica;
-import main.resources.ListaPedidos;
+import main.resources.GeneradorPedidos;
 import main.resources.Pedido;
 
 public class PreparadorPedidos extends Proceso implements Runnable {
@@ -19,7 +19,7 @@ public class PreparadorPedidos extends Proceso implements Runnable {
 
     @Override
     public void run() {
-        tomarPedido(almacen.getListaPedidos());
+        tomarPedido(almacen.getGeneradorPedidos());
         colocarPedido(almacen, pedido);
         pedido = null;
     }
@@ -29,7 +29,7 @@ public class PreparadorPedidos extends Proceso implements Runnable {
      * @param listaPedido
      */
 
-    private void tomarPedido(ListaPedidos listaPedido) {
+    private void tomarPedido(GeneradorPedidos listaPedido) {
         this.pedido = listaPedido.tomarPedido();
     }
 

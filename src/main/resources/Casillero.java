@@ -6,23 +6,31 @@ public class Casillero {
     private int contadorOcupado;
     private Pedido pedido;
     // Llaves para secciones criticas
-    private final Object llave1, llave2;
+    private final Object llaveOcupar, llaveDesocupar;
 
 
     public Casillero() {
         this.estado = EstadoCasillero.VACIO;
         this.contadorOcupado = 0;
         this.pedido = null;
-        llave1 = new Object();
-        llave2 = new Object();
+        llaveOcupar = new Object();
+        llaveDesocupar = new Object();
     }
 
     public boolean isDisponible() {
         return this.estado == EstadoCasillero.VACIO;
     }
 
+    public boolean isOcupado() {
+        return this.estado == EstadoCasillero.OCUPADO;
+    }
+
     public void setOcupado() {
         this.estado = EstadoCasillero.OCUPADO;
+    }
+
+    public void setVacio() {
+        this.estado = EstadoCasillero.VACIO;
     }
 
     public void setFueraDeServicio() {
@@ -30,8 +38,9 @@ public class Casillero {
     }
 
     public void ocupar(Pedido pedido) {
-        synchronized(llave1) {
+        synchronized(llaveOcupar) {
             if (isDisponible()) {
+                setOcupado();
                 this.pedido = pedido;
                 this.contadorOcupado++;
             }
@@ -39,11 +48,23 @@ public class Casillero {
 
     }
 
-    public Pedido desocupar() {
-        synchronized (llave2) {
-            Pedido pedido = this.pedido;
-            this.pedido = null;
-            return pedido;
+    /* Este metodo originalmente devolvia un Pedido pero lo pase a void
+    * para que posea misma estructura que ocupar(), que primero pregunte
+    * si esta OCUPADO y luego actue, para que, si un Hilo llega al bloque
+    * synchronized, que cuando el hilo que llego primero termine, el segundo
+    * hilo no pase por el condicional, y se vaya a buscar otro Casillero.
+    * Ahora, no se como vamos a hacer para que el segundo hilo que llego,
+    * vuelva a buscar otro casillero.
+    * NO SE si vamos a tener que poner un while() dentro del run() o dentro
+    * del proceso en EmpresaLogistica para que vuelva a buscar en caso que
+    * choque con un Casillero que ya estaba siendo ocupado o desocupado */
+    public void desocupar() {
+        synchronized (llaveDesocupar) {
+            if(isOcupado()) {
+                setVacio();
+                //Pedido pedido = this.pedido;
+                this.pedido = null;
+            }
         }
     }
 }

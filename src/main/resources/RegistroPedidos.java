@@ -1,8 +1,8 @@
 package main.resources;
 
-import main.resources.Pedido;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class RegistroPedidos {
 
@@ -24,15 +24,22 @@ public class RegistroPedidos {
         this.llaveEnTransito = new Object();
     }
 
+    public int generadorNumAleatorio(int size) {
+        Random random = new Random();
+        return random.nextInt(size-1);
+    }
+
+    // Aca tenemos que ver, cuales metodos tenemos que eliminar, ya que por ejemplo,
+    // Creo que no hay que quitar Pedidos de la ultima lista.
     public void addPedidoPreparacion(Pedido pedido) {
         synchronized (this.llavePreparacion) {
             enPreparacion.add(pedido);
         }
     }
 
-    public void removePedidoPreparacion(Pedido pedido) {
+    public void removePedidoPreparacion() {
         synchronized (this.llavePreparacion) {
-            enPreparacion.remove(pedido);
+            enPreparacion.remove(generadorNumAleatorio(enPreparacion.size()));
         }
     }
 
@@ -42,9 +49,9 @@ public class RegistroPedidos {
         }
     }
 
-    public void removePedidoEntregado(Pedido pedido) {
+    public void removePedidoEntregado() {
         synchronized (this.llaveEntregados) {
-            entregados.remove(pedido);
+            entregados.remove(generadorNumAleatorio(entregados.size()));
         }
     }
 
@@ -54,9 +61,9 @@ public class RegistroPedidos {
         }
     }
 
-    public void removePedidoFallido(Pedido pedido) {
+    public void removePedidoFallido() {
         synchronized (this.llaveFallidos) {
-            fallidos.remove(pedido);
+            fallidos.remove(generadorNumAleatorio(fallidos.size()));
         }
     }
 
@@ -66,9 +73,9 @@ public class RegistroPedidos {
         }
     }
 
-    public void removePedidoEnTransito(Pedido pedido) {
+    public void removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
-            enTransito.remove(pedido);
+            enTransito.remove(generadorNumAleatorio(enTransito.size()));
         }
     }
 }

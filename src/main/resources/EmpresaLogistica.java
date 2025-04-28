@@ -6,12 +6,12 @@ public class EmpresaLogistica {
 
     private Casillero[][] casilleros;
     private RegistroPedidos registrosPedidos;
-    private ListaPedidos listaPedidos;
+    private GeneradorPedidos generadorPedidos;
 
     public EmpresaLogistica() {
         casilleros = new Casillero[20][10];
         registrosPedidos = new RegistroPedidos();
-        listaPedidos = new ListaPedidos();
+        generadorPedidos = new GeneradorPedidos();
 
         //Creo e instancio los casilleros de la matriz casilleros
         for (int i = 0; i < 20; i++) {
@@ -31,6 +31,12 @@ public class EmpresaLogistica {
     como ocupado y se registra el pedido en el registro de pedidos en preparación.
      */
 
+    public void prepararPedido(Pedido ped) {
+        Casillero casi = getCasilleroDisponible();
+        casi.ocupar(ped);
+        registrosPedidos.addPedidoPreparacion(ped);
+    }
+
     public Casillero getCasilleroDisponible() {
         Random random = new Random();
         int i = 0, j = 0;
@@ -39,20 +45,18 @@ public class EmpresaLogistica {
             j = random.nextInt(20); // columna aleatoria (0-19)
             Casillero casi = casilleros[i][j];
             if(casi.isDisponible()) {
-                //Aca habria que ver si conviene retornar el Casillero, o hacerlo un void y simplemente
-                // modificar el casillero y no devolver nada.
-                casi.setOcupado(); //Falta setear el pedido dentro de esta casillero
                 return casi;
             }
         }
     }
 
+    //Estos ultimos dos getters me parece que son innecesarios por el momento
     public Casillero[][] getCasilleros() {
         return casilleros;
     }
 
-    public ListaPedidos getListaPedidos() {
-        return listaPedidos;
+    public GeneradorPedidos getGeneradorPedidos() {
+        return generadorPedidos;
     }
 
     // Métodos para el proceso 2

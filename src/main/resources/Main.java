@@ -28,7 +28,7 @@ public class Main {
 
         // Entregadores (3 hilos)
         for (int i = 1; i <= 3; i++) {
-            Thread t = new Thread(p3, "Delivery " + i);
+            Thread t = new Thread(p3, "Delivery Rappi " + i);
             //t.start();
         }
 

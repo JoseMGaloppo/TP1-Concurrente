@@ -8,6 +8,7 @@ public class Pedido {
     public Pedido(EstadoPedido estado) {
         //this.estado = estado;
         this.procesado = false;
+        this.posicion = new PosicionCasillero();
     }
 
     public boolean isProcesado() {

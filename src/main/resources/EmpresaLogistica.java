@@ -6,12 +6,10 @@ public class EmpresaLogistica {
 
     private Casillero[][] casilleros;
     private RegistroPedidos registrosPedidos;
-    private GeneradorPedidos generadorPedidos;
 
     public EmpresaLogistica() {
         casilleros = new Casillero[20][10];
         registrosPedidos = new RegistroPedidos();
-        generadorPedidos = new GeneradorPedidos();
 
         //Creo e instancio los casilleros de la matriz casilleros
         for (int i = 0; i < 20; i++) {
@@ -25,10 +23,10 @@ public class EmpresaLogistica {
     // Métodos para el proceso 1
     /**
      * Este proceso se encarga de recibir los pedidos de los usuarios. Se
-    tienen tres hilos que ejecutan este proceso. Cada hilo intenta seleccionar un casillero
-    aleatorio en la matriz, verificando que esté disponible. Si el casillero no está vacío, el hilo
-    debe buscar otro casillero que sí lo esté. Una vez ocupado el casillero, el mismo se marca
-    como ocupado y se registra el pedido en el registro de pedidos en preparación.
+     * tienen tres hilos que ejecutan este proceso. Cada hilo intenta seleccionar un casillero
+     * aleatorio en la matriz, verificando que esté disponible. Si el casillero no está vacío, el hilo
+     * debe buscar otro casillero que sí lo esté. Una vez ocupado el casillero, el mismo se marca
+     * como ocupado y se registra el pedido en el registro de pedidos en preparación.
      */
     public void prepararPedido(Pedido ped) {
         boolean casilleroEncontrado = false;
@@ -47,8 +45,8 @@ public class EmpresaLogistica {
         Random random = new Random();
         int i = 0, j = 0;
         while(true) {
-            i = random.nextInt(10); // fila aleatoria (0-9)
-            j = random.nextInt(20); // columna aleatoria (0-19)
+            i = random.nextInt(20); // fila aleatoria (0-19)
+            j = random.nextInt(10); // columna aleatoria (0-9)
             Casillero casi = casilleros[i][j];
             if(casi.isDisponible()) {
                 pediilo.getPosicion().setPosicion(i, j);
@@ -64,10 +62,6 @@ public class EmpresaLogistica {
     //Estos ultimos dos getters me parece que son innecesarios por el momento
     public Casillero[][] getCasilleros() {
         return casilleros;
-    }
-
-    public GeneradorPedidos getGeneradorPedidos() {
-        return generadorPedidos;
     }
 
     // Métodos para el proceso 2

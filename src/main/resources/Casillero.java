@@ -37,15 +37,24 @@ public class Casillero {
         this.estado = EstadoCasillero.FUERADESERVICIO;
     }
 
-    public void ocupar(Pedido pedido) {
+    /*
+    * Intenta ocupar el casillero. Si esta disponible,
+    * lo settea como ocupado, añade el pedido al Casillero,
+    * suma 1 al contador y devuelve True.
+    * En caso que no esté disponible, devuelve false.
+    * @param pedido El pedido a colocar en el Casillero
+    */
+
+    public boolean ocupar(Pedido pedido) {
         synchronized(llaveOcupar) {
             if (isDisponible()) {
                 setOcupado();
                 this.pedido = pedido;
                 this.contadorOcupado++;
+                return true;
             }
         }
-
+        return false;
     }
 
     /* Este metodo originalmente devolvia un Pedido pero lo pase a void
@@ -58,7 +67,7 @@ public class Casillero {
     * NO SE si vamos a tener que poner un while() dentro del run() o dentro
     * del proceso en EmpresaLogistica para que vuelva a buscar en caso que
     * choque con un Casillero que ya estaba siendo ocupado o desocupado */
-    public void desocupar() {
+    public void desocupar(PosicionCasillero posicion) {
         synchronized (llaveDesocupar) {
             if(isOcupado()) {
                 setVacio();

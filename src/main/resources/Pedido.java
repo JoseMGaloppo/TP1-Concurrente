@@ -2,7 +2,7 @@ package main.resources;
 
 public class Pedido {
 
-
+    private PosicionCasillero posicion;
     private boolean procesado;
 
     public Pedido(EstadoPedido estado) {
@@ -15,5 +15,8 @@ public class Pedido {
     }
     public void setProcesado() {
         this.procesado = true;
+    }
+    public PosicionCasillero getPosicion() {
+        return this.posicion;
     }
 }

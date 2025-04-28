@@ -14,21 +14,28 @@ public class Main {
         DeliveryPedidos p3 = new DeliveryPedidos(almacen);
         VerificadorPedidos p4 = new VerificadorPedidos(almacen);
 
+        // Preparadores (3 hilos)
+        for (int i = 1; i <= 3; i++) {
+            Thread t = new Thread(p1, "Preparador " + i);
+            t.start();
+        }
 
-        Thread preparador1 = new Thread(p1, "Preparador1");
-        Thread preparador2 = new Thread(p1, "Preparador2");
-        Thread preparador3 = new Thread(p1, "Preparador3");
+        // Despachadores (2 hilos)
+        for (int i = 1; i <= 2; i++) {
+            Thread t = new Thread(p2, "Despachador " + i);
+            //t.start();
+        }
 
-        Thread despachador1 = new Thread(p2, "Despachador1");
-        Thread despachador2 = new Thread(p2, "Despachador2");
+        // Entregadores (3 hilos)
+        for (int i = 1; i <= 3; i++) {
+            Thread t = new Thread(p3, "Delivery " + i);
+            //t.start();
+        }
 
-        Thread entregadores1 = new Thread(p3, "Entregadores1");
-        Thread entregadores2 = new Thread(p3, "Entregadores2");
-        Thread entregadores3 = new Thread(p3, "Entregadores3");
-
-        Thread verificador1 = new Thread(p4, "Verificador1");
-        Thread verificador2 = new Thread(p4, "Verificador2");
-
-
+        // Verificadores (2 hilos)
+        for (int i = 1; i <= 2; i++) {
+            Thread t = new Thread(p4, "Verificador " + i);
+            //t.start();
+        }
     }
 }

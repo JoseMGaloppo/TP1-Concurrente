@@ -30,15 +30,20 @@ public class EmpresaLogistica {
     debe buscar otro casillero que sí lo esté. Una vez ocupado el casillero, el mismo se marca
     como ocupado y se registra el pedido en el registro de pedidos en preparación.
      */
-
-
     public void prepararPedido(Pedido ped) {
-        Casillero casi = getCasilleroDisponible();
-        casi.ocupar(ped);
-        registrosPedidos.addPedidoPreparacion(ped);
+        boolean casilleroEncontrado = false;
+        while(!casilleroEncontrado) {
+            Casillero casi = getCasilleroDisponible(ped);
+            casilleroEncontrado = casi.ocupar(ped);
+        }
     }
 
-    public Casillero getCasilleroDisponible() {
+    /*
+     * Este metodo encuentra un casillero que este VACIO, al encontrarlo
+     * modifica la PosicionCasillero en el pedido, y devuelve el casillero
+     * disponible
+     */
+    public Casillero getCasilleroDisponible(Pedido pediilo) {
         Random random = new Random();
         int i = 0, j = 0;
         while(true) {
@@ -46,9 +51,14 @@ public class EmpresaLogistica {
             j = random.nextInt(20); // columna aleatoria (0-19)
             Casillero casi = casilleros[i][j];
             if(casi.isDisponible()) {
+                pediilo.getPosicion().setPosicion(i, j);
                 return casi;
             }
         }
+    }
+
+    public void registrarPedidoPreparacion(Pedido pedido) {
+        this.registrosPedidos.addPedidoPreparacion(pedido);
     }
 
     //Estos ultimos dos getters me parece que son innecesarios por el momento

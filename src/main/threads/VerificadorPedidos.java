@@ -3,9 +3,9 @@ package main.threads;
 
 import main.resources.EmpresaLogistica;
 
-public class Verificador extends Proceso implements Runnable {
+public class VerificadorPedidos extends Proceso implements Runnable {
 
-    public Verificador(EmpresaLogistica almacen) {
+    public VerificadorPedidos(EmpresaLogistica almacen) {
         super(almacen);
     }
 

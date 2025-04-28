@@ -1,3 +1,4 @@
+/* Deben instanciarse 2 hilos de este tipo, para que actuen como despachadores de pedidos. */
 package main.threads;
 
 import main.resources.EmpresaLogistica;

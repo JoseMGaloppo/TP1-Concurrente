@@ -31,6 +31,7 @@ public class EmpresaLogistica {
     como ocupado y se registra el pedido en el registro de pedidos en preparación.
      */
 
+
     public void prepararPedido(Pedido ped) {
         Casillero casi = getCasilleroDisponible();
         casi.ocupar(ped);

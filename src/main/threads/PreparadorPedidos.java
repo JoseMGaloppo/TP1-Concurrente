@@ -7,6 +7,7 @@ import main.resources.Pedido;
 public class PreparadorPedidos extends Proceso implements Runnable {
 
     private Pedido pedido;
+    String nombre;
 
     public PreparadorPedidos(EmpresaLogistica almacen) {
         super(almacen);

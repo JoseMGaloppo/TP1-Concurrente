@@ -6,6 +6,7 @@ public class EmpresaLogistica {
 
     private Casillero[][] casilleros;
     private RegistroPedidos registrosPedidos;
+    private boolean sinPedidos;
 
     public EmpresaLogistica() {
         casilleros = new Casillero[20][10];
@@ -18,7 +19,18 @@ public class EmpresaLogistica {
             }
         }
 
+        sinPedidos = false;
+
     }
+
+    public void setSinPedidos(){
+        sinPedidos = true;
+    }
+
+    public boolean getSinPedidos(){
+        return sinPedidos;
+    }
+
 
     // Métodos para el proceso 1
     /**
@@ -90,14 +102,14 @@ public class EmpresaLogistica {
      * Se entrega el pedido con un 90% de probabilidad de éxito.
      *
      * <p>Si la entrega es exitosa, el pedido se mueve desde el registro de
-     *  pedidos en tránsito al registro de pedidos entregados. Si falla, se
-     *  mueve al registro de pedidos fallidos.
-     *  Solo se realiza la entrega si la lista de pedidos en tránsito no está vacía
-     * @param pedido Pedido a entregar
+     * pedidos en tránsito al registro de pedidos entregados. Si falla, se
+     * mueve al registro de pedidos fallidos.
+     * Solo se realiza la entrega si la lista de pedidos en tránsito no está vacía
+     *
      * @return boolean
      */
 
-    public boolean entregarPedido(Pedido pedido) {
+    public boolean entregarPedido() {
         Random r = new Random();
         boolean verificado = r.nextInt(100)<90;
 

@@ -16,10 +16,11 @@ public class PreparadorPedidos extends Proceso implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while(true) {
             try{
                 this.pedido = generadorPedidos.tomarPedido();
                 if(this.pedido == null) {
+                    almacen.setSinPedidos();
                     throw new InterruptedException();
                 }
                 Thread.sleep(400);
@@ -30,15 +31,13 @@ public class PreparadorPedidos extends Proceso implements Runnable {
                 //notifyAll(); --> Deberia notificar a los de proceso2 que esperan a que hayan pedidos en casilleros.
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt();
+                break;
             }
         }
 
     }
 
-    /**
-     *
-     * @param listaPedido
-     */
+
 
     /*
     private void tomarPedido(GeneradorPedidos listaPedido) {

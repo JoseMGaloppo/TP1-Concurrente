@@ -16,7 +16,11 @@ public class GeneradorPedidos {
         }
     }
 
-    // Método sincronizado para tomar un pedido
+    /**
+     * Se elimina el primer elemento de la lista y retorna el pedido en esa posicion.
+     * Solo si la lista no está vacía
+     * @return Pedido
+     */
     public synchronized Pedido tomarPedido() {
         if (!listaDePedidos.isEmpty()) {
             // Saca el primer pedido de la lista
@@ -24,6 +28,10 @@ public class GeneradorPedidos {
         } else {
             return null; // No quedan pedidos
         }
+    }
+
+    public boolean isEmptyListaDePedidos() {
+        return listaDePedidos.isEmpty();
     }
 
 }

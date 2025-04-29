@@ -36,6 +36,10 @@ public class RegistroPedidos {
         }
     }
 
+    public List<Pedido> getEnPreparacion() {
+            return enPreparacion;
+    }
+
     public void addPedidoEntregado(Pedido pedido) {
         synchronized (this.llaveEntregados) {
             entregados.add(pedido);

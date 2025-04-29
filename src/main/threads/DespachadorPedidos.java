@@ -1,6 +1,11 @@
 package main.threads;
 
-import main.resources.EmpresaLogistica;
+import main.resources.*;
+
+import java.util.Random;
+import java.util.List;
+import java.util.ArrayList;
+
 
 @SuppressWarnings("ALL")
 public class DespachadorPedidos extends Proceso implements Runnable {
@@ -10,29 +15,19 @@ public class DespachadorPedidos extends Proceso implements Runnable {
     }
 
     /**
-     * Despacho de Pedido: Este proceso es ejecutado por dos hilos, y se encarga de despachar los pedidos del listado de pedidos en preparación.
+     * DESPACHO DE PEDIDO
      *
-     * Cada hilo toma un pedido aleatorio del registro de pedidos en preparación y realiza una verificación de los datos del pedido y del usuario.
+     * Este proceso es ejecutado por dos hilos, y se encarga de despachar los pedidos de "List<Pedido> enPreparacion"
+     *
+     * Cada hilo toma un pedido aleatorio de "List<Pedido> enPreparacion" y realiza una verificación de los datos del pedido y del usuario.
      *
      * Se establece una probabilidad del 85% de que la información sea correcta y un 15% de que sea incorrecta.
      *
-     * Si la información fue correcta, el casillero vuelve al estado vacío, y el pedido se elimina del registro de pedidos en preparación y se agrega al registro
-     * de pedidos en tránsito.
+     * Si la información fue correcta, el casillero vuelve al estado vacío, y el pedido se elimina del "List<Pedido> enPreparacion" y se agrega al "List<Pedido> enTransito"
      *
-     * De lo contrario, el casillero pasa a estado fuera de servicio y el pedido se marca como fallido,
-     * se elimina del registro de pedidos en preparación y se
-     * agrega al registro de pedidos fallidos.
+     * De lo contrario, el casillero pasa a estado fuera de servicio y el pedido se marca como fallido, se elimina de "List<Pedido> enPreparacion" y se suma a "List<Pedido> fallidos"
      */
     @Override
-    public void run() {
-
-    }
-
-    public boolean verificarDatos() {
-        int numeroAleatorio = (int) (Math.random() * 100);
-        return numeroAleatorio < 85;
-    }
-
-
+    public void run() {}
 
 }

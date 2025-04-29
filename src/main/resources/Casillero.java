@@ -65,7 +65,7 @@ public class Casillero {
      * NO SE si vamos a tener que poner un while() dentro del run() o dentro
      * del proceso en EmpresaLogistica para que vuelva a buscar en caso que
      * choque con un Casillero que ya estaba siendo ocupado o desocupado */
-    public void desocupar(PosicionCasillero posicion) {
+    public void desocupar() {
         synchronized (llaveDesocupar) {
             if(isOcupado()) {
                 setVacio();

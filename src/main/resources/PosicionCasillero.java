@@ -25,10 +25,10 @@ public class PosicionCasillero {
         return this.estado;
     }
 
-    public int getPosI() {
+    public int getPosi() {
         return this.posi;
     }
-    public int getPosJ() {
+    public int getPosj() {
         return this.posj;
     }
 }

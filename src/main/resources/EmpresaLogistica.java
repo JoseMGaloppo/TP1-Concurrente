@@ -46,10 +46,6 @@ public class EmpresaLogistica {
         this.registrosPedidos.addPedidoPreparacion(pedido);
     }
 
-    public Casillero[][] getCasilleros() {
-        return casilleros;
-    }
-
     public GeneradorPedidos getGeneradorPedidos() {
         return generadorPedidos;
     }
@@ -60,6 +56,27 @@ public class EmpresaLogistica {
 
 
     //MÉTODOS PROCESO 2 - DESPACHADOR DE PEDIDOS
+    /**
+     * Verifica si hay pedidos en la lista de "List<Pedido> enPreparacion"
+     * @return true si hay pedidos en la lista, false si no hay
+     */
+    public boolean verificarDespacho() {
+        if (!this.registrosPedidos.getEnPreparacion().isEmpty()) {
+            Pedido pedido = registrosPedidos.removePedidoPreparacion();
+            Casillero casi = obtenerCasillero(pedido);
+            if (probabilidadDatos()) {
+                //this.registrosPedidos.informacionCorrecta(pedido);
+                registrosPedidos.registrarDespachos(pedido);
+                casi.desocupar();
+            } else {
+                //this.registrosPedidos.informacionIncorrecta(pedido);
+                registrosPedidos.addPedidoFallido(pedido);
+                casi.setFueraDeServicio();
+            }
+            return true; // <= mepa q no hay q devolver nada
+        }
+        return false;
+    }
 
     /**
      * Genera un número aleatorio entre 0 y 100, y verifica si es menor a 85
@@ -70,54 +87,20 @@ public class EmpresaLogistica {
         return numeroAleatorio < 85;
     }
 
-    /**
-     * Genera un número aleatorio entre 0 y el tamaño de la lista de pedidos en preparación
-     * @return un pedido aleatorio de la lista de pedidos en preparación
-     */
-    public Pedido getPedidoAleatorio() {
-        Random random = new Random();
-        int index = random.nextInt(this.registrosPedidos.getEnPreparacion().size());
-        return this.registrosPedidos.getEnPreparacion().get(index);
+    public void despacharPedido() {
+        //obtenerCasilleroPosicion(ped);
+        // Lo saca del Casillero y lo setea como ocupado
+        // Lo mete en la lista enTransito o si falla, lo mete al registro de pedidos fallidos y setea el casillero como FUERA DE SERVICIO
     }
 
-    /**
-     * Si la informacion es correcta cambia el estado del casillero a VACIO y elimina el pedido de la lista de "List<Pedido> enPreparacion"
-     * y lo agrega a la lista de "List<Pedido> enTransito"
-     * @param pedido con informacion correcta
+
+    /*
+     * Obtiene el Casillero asociado a la posicion i, j de un pedido en especifico.
+     * Param: ped el Pedido en el que se busca donde esta guardado
+     * @return Casillero el casillero en donde esta metido ese Pedido
      */
-    public void informacionCorrecta(Pedido pedido) {
-        pedido.getPosicion().setEstado(EstadoCasillero.VACIO);
-        this.registrosPedidos.removePedidoPreparacion(pedido);
-        this.registrosPedidos.addPedidoEnTransito(pedido);
+    public Casillero obtenerCasillero(Pedido ped) {
+        return casilleros[ped.getPosicion().getPosi()][ped.getPosicion().getPosj()];
     }
 
-    /**
-     * Si la informacion es incorrecta cambia el estado del casillero a FUERA_DE_SERVICIO y elimina el pedido de la lista de "List<Pedido> enPreparacion"
-     * seteando el estado del pedido a FALLIDO y lo agrega a la lista de "List<Pedido> fallidos"
-     * @param pedido con informacion incorrecta
-     */
-    public void informacionIncorrecta(Pedido pedido) {
-        pedido.getPosicion().setEstado(EstadoCasillero.FUERADESERVICIO);
-        pedido.setEstado(EstadoPedido.FALLIDO);
-        this.registrosPedidos.removePedidoPreparacion(pedido);
-        this.registrosPedidos.addPedidoFallido(pedido);
-    }
-
-    /**
-     * Verifica si hay pedidos en la lista de "List<Pedido> enPreparacion"
-     * @return true si hay pedidos en la lista, false si no hay
-     */
-    public boolean verificarPedido() {
-        if (!this.registrosPedidos.getEnPreparacion().isEmpty()) {
-            Pedido pedido = this.getPedidoAleatorio();
-
-            if (probabilidadDatos()) {
-                this.informacionCorrecta(pedido);
-            } else {
-                this.informacionIncorrecta(pedido);
-            }
-            return true;
-        }
-        return false;
-    }
 }

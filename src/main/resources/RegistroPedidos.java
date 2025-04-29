@@ -3,6 +3,7 @@ package main.resources;
 import main.resources.Pedido;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class RegistroPedidos {
 
@@ -24,20 +25,67 @@ public class RegistroPedidos {
         this.llaveEnTransito = new Object();
     }
 
+    public void registrarDespachos(Pedido ped) {
+        addPedidoEnTransito(ped);
+    }
+
+    public void descartarDespachos() {
+        Pedido ped = removePedidoPreparacion();
+        addPedidoFallido(ped);
+    }
+
+    /**
+     * Genera un número aleatorio entre 0 y el tamaño de la lista de pedidos en preparación
+     * @return un pedido aleatorio de la lista de pedidos en preparación
+     */
+    public Pedido getPedidoAleatorio() {
+        Random random = new Random();
+        int index = random.nextInt(getEnPreparacion().size());
+        return getEnPreparacion().get(index);
+    }
+
+    /**
+     * Si la informacion es correcta cambia el estado del casillero a VACIO y elimina el pedido de la lista de "List<Pedido> enPreparacion"
+     * y lo agrega a la lista de "List<Pedido> enTransito"
+     * @param pedido con informacion correcta
+     */
+    public void informacionCorrecta(Pedido pedido) {
+        //pedido.getPosicion().setEstado(EstadoCasillero.VACIO); // Lo hacemos en desocupar
+
+        registrarDespachos();
+    }
+
+    /**
+     * Si la informacion es incorrecta cambia el estado del casillero a FUERA_DE_SERVICIO y elimina el pedido de la lista de "List<Pedido> enPreparacion"
+     * seteando el estado del pedido a FALLIDO y lo agrega a la lista de "List<Pedido> fallidos"
+     * @param pedido con informacion incorrecta
+     */
+    public void informacionIncorrecta(Pedido pedido) {
+        pedido.getPosicion().setEstado(EstadoCasillero.FUERADESERVICIO);
+        pedido.setEstado(EstadoPedido.FALLIDO);
+        descartarDespachos();
+    }
+
+
+    public List<Pedido> getEnPreparacion() {
+        return enPreparacion;
+    }
+
+    public int generadorNumAleatorio(int size) {
+        Random random = new Random();
+        return random.nextInt(size);
+    }
+
     public void addPedidoPreparacion(Pedido pedido) {
         synchronized (this.llavePreparacion) {
             enPreparacion.add(pedido);
         }
     }
 
-    public void removePedidoPreparacion(Pedido pedido) {
+    public Pedido removePedidoPreparacion() {
         synchronized (this.llavePreparacion) {
-            enPreparacion.remove(pedido);
+            return enPreparacion.remove(generadorNumAleatorio(enPreparacion.size()));
         }
-    }
-
-    public List<Pedido> getEnPreparacion() {
-            return enPreparacion;
     }
 
     public void addPedidoEntregado(Pedido pedido) {
@@ -46,9 +94,9 @@ public class RegistroPedidos {
         }
     }
 
-    public void removePedidoEntregado(Pedido pedido) {
+    public Pedido removePedidoEntregado() {
         synchronized (this.llaveEntregados) {
-            entregados.remove(pedido);
+            return enPreparacion.remove(generadorNumAleatorio(entregados.size()));
         }
     }
 
@@ -58,9 +106,9 @@ public class RegistroPedidos {
         }
     }
 
-    public void removePedidoFallido(Pedido pedido) {
+    public Pedido removePedidoFallido() {
         synchronized (this.llaveFallidos) {
-            fallidos.remove(pedido);
+            return enPreparacion.remove(generadorNumAleatorio(fallidos.size()));
         }
     }
 
@@ -70,9 +118,9 @@ public class RegistroPedidos {
         }
     }
 
-    public void removePedidoEnTransito(Pedido pedido) {
+    public Pedido removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
-            enTransito.remove(pedido);
+           return enPreparacion.remove(generadorNumAleatorio(enTransito.size()));
         }
     }
 }

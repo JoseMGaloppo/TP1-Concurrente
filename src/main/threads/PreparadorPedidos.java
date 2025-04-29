@@ -16,17 +16,23 @@ public class PreparadorPedidos extends Proceso implements Runnable {
 
     @Override
     public void run() {
-        try{
-            this.pedido = generadorPedidos.tomarPedido();
-            Thread.sleep(400);
-            almacen.prepararPedido(this.pedido);
-            Thread.sleep(1200);
-            almacen.registrarPedidoPreparacion(this.pedido);
-            Thread.sleep(500);
-            //notifyAll(); --> Deberia notificar a los de proceso2 que esperan a que hayan pedidos en casilleros.
-        } catch(InterruptedException e) {
-            Thread.currentThread().interrupt();
+        while (true) {
+            try{
+                this.pedido = generadorPedidos.tomarPedido();
+                if(this.pedido == null) {
+                    throw new InterruptedException();
+                }
+                Thread.sleep(400);
+                almacen.prepararPedido(this.pedido);
+                Thread.sleep(1200);
+                almacen.registrarPedidoPreparacion(this.pedido);
+                Thread.sleep(500);
+                //notifyAll(); --> Deberia notificar a los de proceso2 que esperan a que hayan pedidos en casilleros.
+            } catch(InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
+
     }
 
     /**

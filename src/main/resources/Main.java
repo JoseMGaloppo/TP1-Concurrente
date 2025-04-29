@@ -9,14 +9,14 @@ public class Main {
     public static void main(String[] args) {
 
         EmpresaLogistica almacen = new EmpresaLogistica();
-        PreparadorPedidos p1 = new PreparadorPedidos(almacen);
+        PreparadorPedidos venThread = new PreparadorPedidos(almacen);
         DespachadorPedidos p2 = new DespachadorPedidos(almacen);
         DeliveryPedidos p3 = new DeliveryPedidos(almacen);
         VerificadorPedidos p4 = new VerificadorPedidos(almacen);
 
         // Preparadores (3 hilos)
         for (int i = 1; i <= 3; i++) {
-            Thread t = new Thread(p1, "Preparador " + i);
+            Thread t = new Thread(venThread, "Preparador " + i);
             t.start();
         }
 

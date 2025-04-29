@@ -59,11 +59,6 @@ public class EmpresaLogistica {
         this.registrosPedidos.addPedidoPreparacion(pedido);
     }
 
-    //Estos ultimos dos getters me parece que son innecesarios por el momento
-    public Casillero[][] getCasilleros() {
-        return casilleros;
-    }
-
     // Métodos para el proceso 2
     /* Este proceso es ejecutado por dos hilos, y se encarga de despachar
     los pedidos del listado de pedidos en preparación. Cada hilo toma un pedido aleatorio del
@@ -74,6 +69,22 @@ public class EmpresaLogistica {
     de pedidos en tránsito. De lo contrario, el casillero pasa a estado fuera de servicio y el
     pedido se marca como fallido, se elimina del registro de pedidos en preparación y se
     agrega al registro de pedidos fallidos. */
+
+    public void despacharPedido() {
+        // Agarra un elemento de la lista enPreparacion
+        //obtenerCasilleroPosicion(ped);
+        // Lo saca del Casillero y lo setea como ocupado
+        // Lo mete en la lista enTransito o si falla, lo mete al registro de pedidos fallidos y setea el casillero como FUERA DE SERVICIO
+    }
+
+    public void obtenerCasilleroPosicion(Pedido ped) {
+        Casillero casi = casilleros[ped.getPosicion().getPosi()][ped.getPosicion().getPosj()];
+        // NO FALLA
+        casi.desocupar(); // -> Lista enTransito
+        // FALLA 15%
+        casi.setFueraDeServicio(); // -> FUERA DE SERVICIO -> Lista fallidos
+    }
+
 
     // Métodos para el proceso 3
     /* Tres hilos se encargan de ejecutar este paso. Cada hilo selecciona un

@@ -86,12 +86,34 @@ public class EmpresaLogistica {
     }
 
 
-    // Métodos para el proceso 3
-    /* Tres hilos se encargan de ejecutar este paso. Cada hilo selecciona un
-    pedido aleatorio del registro de pedidos en tránsito y con una probabilidad del 90%, lo
-    confirma. Si el pedido es confirmado, se elimina del registro de pedidos en tránsito y se
-    agrega al registro de pedidos entregados. Si el pedido no es confirmado, se elimina del
-    registro de pedidos en tránsito y se agrega al registro de pedidos fallidos. */
+    /**
+     * Se entrega el pedido con un 90% de probabilidad de éxito.
+     *
+     * <p>Si la entrega es exitosa, el pedido se mueve desde el registro de
+     *  pedidos en tránsito al registro de pedidos entregados. Si falla, se
+     *  mueve al registro de pedidos fallidos.
+     *  Solo se realiza la entrega si la lista de pedidos en tránsito no está vacía
+     * @param pedido Pedido a entregar
+     * @return boolean
+     */
+
+    public boolean entregarPedido(Pedido pedido) {
+        Random r = new Random();
+        boolean verificado = r.nextInt(100)<90;
+
+        if(!this.registrosPedidos.isEmptyEnTransito()){
+            if(verificado) {
+                this.registrosPedidos.addPedidoEntregado(this.registrosPedidos.removePedidoEnTransito());
+            }
+
+            else {
+                this.registrosPedidos.addPedidoFallido(this.registrosPedidos.removePedidoEnTransito());
+            }
+
+            return true;
+        }
+        return false;
+    }
 
     // Métodos para el proceso 4
     /* Al finalizar la ejecución, se debe verificar el estado final de los pedidos

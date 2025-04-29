@@ -17,6 +17,7 @@ public class RegistroPedidos {
         this.entregados = new ArrayList<>();
         this.fallidos = new ArrayList<>();
         this.enTransito = new ArrayList<>();
+
         //Llaves para sincronizar las listas
         this.llavePreparacion = new Object();
         this.llaveEntregados = new Object();
@@ -37,9 +38,9 @@ public class RegistroPedidos {
         }
     }
 
-    public void removePedidoPreparacion() {
+    public Pedido removePedidoPreparacion() {
         synchronized (this.llavePreparacion) {
-            enPreparacion.remove(generadorNumAleatorio(enPreparacion.size()));
+            return enPreparacion.remove(generadorNumAleatorio(enPreparacion.size()));
         }
     }
 
@@ -73,9 +74,27 @@ public class RegistroPedidos {
         }
     }
 
-    public void removePedidoEnTransito() {
+    public Pedido removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
-            enTransito.remove(generadorNumAleatorio(enTransito.size()));
+            return enTransito.remove(generadorNumAleatorio(enTransito.size()));
+        }
+    }
+
+    public boolean isEmptyPreparacion() {
+        synchronized (this.llavePreparacion) {
+            return enPreparacion.isEmpty();
+        }
+    }
+
+    public boolean isEmptyEnTransito() {
+        synchronized (this.llaveFallidos) {
+            return enTransito.isEmpty();
+        }
+    }
+
+    public boolean isEmptyEntregados() {
+        synchronized (this.llaveEntregados) {
+            return entregados.isEmpty();
         }
     }
 }

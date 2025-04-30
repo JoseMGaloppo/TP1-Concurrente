@@ -12,9 +12,7 @@ public class Pedido {
         posicion = new PosicionCasillero();
     }
 
-    public PosicionCasillero getPosicion () {
-        return posicion;
-    }
+    public PosicionCasillero getPosicion () { return posicion; }
 
     public EstadoPedido getEstado() {
         return estado;

@@ -8,6 +8,10 @@ public class EmpresaLogistica {
     protected RegistroPedidos registrosPedidos;
     private GeneradorPedidos generadorPedidos;
 
+    /**
+     * Constructor de la clase EmpresaLogistica
+     * Comienza con 200 casilleros vacios, un registro de pedidos y un generador de pedidos
+     */
     public EmpresaLogistica() {
         casilleros = new Casillero[20][10];
         registrosPedidos = new RegistroPedidos();
@@ -20,6 +24,10 @@ public class EmpresaLogistica {
         }
     }
 
+    /**
+     * Ocupa un casillero aleatorio disponible para el pedido
+     * @param pedido el pedido a ocupar en el casillero
+     */
     public void prepararPedido(Pedido pedido) {
         boolean casilleroEncontrado = false;
         while(!casilleroEncontrado) {
@@ -28,6 +36,11 @@ public class EmpresaLogistica {
         }
     }
 
+    /**
+     * Devuelve un casillero aleatorio disponible para el pedido
+     * @param pedido a asignar casillero disponible
+     * @return casillero disponible
+     */
     public Casillero getCasilleroDisponible(Pedido pedido) {
         Random random = new Random();
         int i = 0, j = 0;
@@ -42,14 +55,26 @@ public class EmpresaLogistica {
         }
     }
 
+    /**
+     * Registra un pedido en la lista de pedidos en preparación
+     * @param pedido el pedido a registrar en la lista de pedidos en preparación
+     */
     public void registrarPedidoPreparacion(Pedido pedido) {
         this.registrosPedidos.addPedidoPreparacion(pedido);
     }
 
+    /**
+     * Devuelve el generador de pedidos de la Empresa Logística
+     * @return
+     */
     public GeneradorPedidos getGeneradorPedidos() {
         return generadorPedidos;
     }
 
+    /**
+     * Devuelve el registro de pedidos de la Empresa Logística
+     * @return
+     */
     public RegistroPedidos getRegistroPedidos() {
         return registrosPedidos;
     }
@@ -88,17 +113,11 @@ public class EmpresaLogistica {
         return numeroAleatorio < 85;
     }
 
-    public void despacharPedido() {
-        //obtenerCasilleroPosicion(ped);
-        // Lo saca del Casillero y lo setea como ocupado
-        // Lo mete en la lista enTransito o si falla, lo mete al registro de pedidos fallidos y setea el casillero como FUERA DE SERVICIO
-    }
-
-
     /**
      * Obtiene el Casillero asociado a la posicion i, j de un pedido en especifico.
      * Param: ped el Pedido en el que se busca donde esta guardado
      * @return Casillero el casillero en donde esta metido ese Pedido
+     * @param ped el pedido a obtener el casillero
      */
     public Casillero obtenerCasillero(Pedido ped) {
         return casilleros[ped.getPosicion().getPosi()][ped.getPosicion().getPosj()];

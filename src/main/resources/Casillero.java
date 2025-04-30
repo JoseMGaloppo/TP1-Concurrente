@@ -35,14 +35,11 @@ public class Casillero {
         this.estado = EstadoCasillero.FUERADESERVICIO;
     }
 
-    /*
-     * Intenta ocupar el casillero. Si esta disponible,
-     * lo settea como ocupado, añade el pedido al Casillero,
-     * suma 1 al contador y devuelve True.
-     * En caso que no esté disponible, devuelve false.
-     * @param pedido El pedido a colocar en el Casillero
+    /**
+     * Este metodo ocupa el casillero si esta disponible, lo setea como ocupado, le asigna el pedido y aumenta el contador de ocupado
+     * @param pedido el pedido a ocupar en el casillero
+     * @return true si se pudo ocupar el casillero, false si no esta disponible
      */
-
     public boolean ocupar(Pedido pedido) {
         synchronized(llaveOcupar) {
             if (isDisponible()) {
@@ -55,16 +52,9 @@ public class Casillero {
         return false;
     }
 
-    /* Este metodo originalmente devolvia un Pedido pero lo pase a void
-     * para que posea misma estructura que ocupar(), que primero pregunte
-     * si esta OCUPADO y luego actue, para que, si un Hilo llega al bloque
-     * synchronized, que cuando el hilo que llego primero termine, el segundo
-     * hilo no pase por el condicional, y se vaya a buscar otro Casillero.
-     * Ahora, no se como vamos a hacer para que el segundo hilo que llego,
-     * vuelva a buscar otro casillero.
-     * NO SE si vamos a tener que poner un while() dentro del run() o dentro
-     * del proceso en EmpresaLogistica para que vuelva a buscar en caso que
-     * choque con un Casillero que ya estaba siendo ocupado o desocupado */
+    /**
+     * Este metodo desocupa el casillero si esta ocupado, lo setea como vacio y le asigna null al pedido
+     */
     public void desocupar() {
         synchronized (llaveDesocupar) {
             if(isOcupado()) {

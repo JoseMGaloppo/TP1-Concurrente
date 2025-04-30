@@ -18,6 +18,7 @@ public class RegistroPedidos {
         this.entregados = new ArrayList<>();
         this.fallidos = new ArrayList<>();
         this.enTransito = new ArrayList<>();
+
         //Llaves para sincronizar las listas
         this.llavePreparacion = new Object();
         this.llaveEntregados = new Object();
@@ -25,50 +26,23 @@ public class RegistroPedidos {
         this.llaveEnTransito = new Object();
     }
 
+    /**
+     * Registra un pedido en la lista de pedidos en transito y setea el estado de pedido a EN_TRANSITO
+     * @param pedido el pedido a registrar en la lista de pedidos en transito y a setear el estado
+     */
     public void registrarDespacho(Pedido pedido) {
         addPedidoEnTransito(pedido);
         pedido.setEstado(EstadoPedido.EN_TRANSITO);
     }
 
+    /**
+     * Registra un pedido en la lista de pedidos fallidos y setea el estado de pedido a FALLIDO
+     * @param pedido el pedido a registrar en la lista de pedidos fallidos y a setear el estado
+     */
     public void descartarDespacho(Pedido pedido) {
         addPedidoFallido(pedido);
         pedido.setEstado(EstadoPedido.FALLIDO);
     }
-
-    /**
-     * Genera un número aleatorio entre 0 y el tamaño de la lista de pedidos en preparación
-     * @return un pedido aleatorio de la lista de pedidos en preparación
-     */
-    public Pedido getPedidoAleatorio() {
-        Random random = new Random();
-        int index = random.nextInt(getEnPreparacion().size());
-        return getEnPreparacion().get(index);
-    }
-
-    /**
-     * Si la informacion es correcta cambia el estado del casillero a VACIO y elimina el pedido de la lista de "List<Pedido> enPreparacion"
-     * y lo agrega a la lista de "List<Pedido> enTransito"
-     * @param pedido con informacion correcta
-     */
-    //public void informacionCorrecta(Pedido pedido) {
-    //    registrarDespacho(pedido);
-    //}
-
-    /**
-     * Si la informacion es incorrecta cambia el estado del casillero a FUERA_DE_SERVICIO y elimina el pedido de la lista de "List<Pedido> enPreparacion"
-     * seteando el estado del pedido a FALLIDO y lo agrega a la lista de "List<Pedido> fallidos"
-     * //@param pedido con informacion incorrecta
-     */
-//    public void informacionIncorrecta(Pedido pedido) {
-//        pedido.getPosicion().setEstado(EstadoCasillero.FUERADESERVICIO);
-//        pedido.setEstado(EstadoPedido.FALLIDO);
-//        descartarDespacho();
-//    }
-
-
-
-
-
 
     public List<Pedido> getEnPreparacion() {
         return enPreparacion;

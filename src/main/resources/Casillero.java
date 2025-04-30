@@ -69,7 +69,6 @@ public class Casillero {
         synchronized (llaveDesocupar) {
             if(isOcupado()) {
                 setVacio();
-                //Pedido pedido = this.pedido;
                 this.pedido = null;
             }
         }

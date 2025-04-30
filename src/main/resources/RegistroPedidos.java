@@ -25,13 +25,14 @@ public class RegistroPedidos {
         this.llaveEnTransito = new Object();
     }
 
-    public void registrarDespachos(Pedido ped) {
-        addPedidoEnTransito(ped);
+    public void registrarDespacho(Pedido pedido) {
+        addPedidoEnTransito(pedido);
+        pedido.setEstado(EstadoPedido.EN_TRANSITO);
     }
 
-    public void descartarDespachos() {
-        Pedido ped = removePedidoPreparacion();
-        addPedidoFallido(ped);
+    public void descartarDespacho(Pedido pedido) {
+        addPedidoFallido(pedido);
+        pedido.setEstado(EstadoPedido.FALLIDO);
     }
 
     /**
@@ -49,22 +50,24 @@ public class RegistroPedidos {
      * y lo agrega a la lista de "List<Pedido> enTransito"
      * @param pedido con informacion correcta
      */
-    public void informacionCorrecta(Pedido pedido) {
-        //pedido.getPosicion().setEstado(EstadoCasillero.VACIO); // Lo hacemos en desocupar
-
-        registrarDespachos();
-    }
+    //public void informacionCorrecta(Pedido pedido) {
+    //    registrarDespacho(pedido);
+    //}
 
     /**
      * Si la informacion es incorrecta cambia el estado del casillero a FUERA_DE_SERVICIO y elimina el pedido de la lista de "List<Pedido> enPreparacion"
      * seteando el estado del pedido a FALLIDO y lo agrega a la lista de "List<Pedido> fallidos"
-     * @param pedido con informacion incorrecta
+     * //@param pedido con informacion incorrecta
      */
-    public void informacionIncorrecta(Pedido pedido) {
-        pedido.getPosicion().setEstado(EstadoCasillero.FUERADESERVICIO);
-        pedido.setEstado(EstadoPedido.FALLIDO);
-        descartarDespachos();
-    }
+//    public void informacionIncorrecta(Pedido pedido) {
+//        pedido.getPosicion().setEstado(EstadoCasillero.FUERADESERVICIO);
+//        pedido.setEstado(EstadoPedido.FALLIDO);
+//        descartarDespacho();
+//    }
+
+
+
+
 
 
     public List<Pedido> getEnPreparacion() {
@@ -120,7 +123,7 @@ public class RegistroPedidos {
 
     public Pedido removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
-           return enPreparacion.remove(generadorNumAleatorio(enTransito.size()));
+            return enPreparacion.remove(generadorNumAleatorio(enTransito.size()));
         }
     }
 }

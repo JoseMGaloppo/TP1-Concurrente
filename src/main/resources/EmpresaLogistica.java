@@ -54,26 +54,27 @@ public class EmpresaLogistica {
         return registrosPedidos;
     }
 
-
     //MÉTODOS PROCESO 2 - DESPACHADOR DE PEDIDOS
+
     /**
-     * Verifica si hay pedidos en la lista de "List<Pedido> enPreparacion"
-     * @return true si hay pedidos en la lista, false si no hay
+     * Verifica si la lista está vacía, en base al resultado se fija la probabilidad de que la información sea correcta, luego realiza los seteos
+     * de estados y cambios entre listas necesarios.
+     * @return true si hay pedidos en la lista y la informacion es correcta, false si la lista está vacía y la información es incorrecta
      */
     public boolean verificarDespacho() {
         if (!this.registrosPedidos.getEnPreparacion().isEmpty()) {
             Pedido pedido = registrosPedidos.removePedidoPreparacion();
             Casillero casi = obtenerCasillero(pedido);
+
             if (probabilidadDatos()) {
-                //this.registrosPedidos.informacionCorrecta(pedido);
-                registrosPedidos.registrarDespachos(pedido);
+                registrosPedidos.registrarDespacho(pedido);
                 casi.desocupar();
+                return true;
             } else {
-                //this.registrosPedidos.informacionIncorrecta(pedido);
-                registrosPedidos.addPedidoFallido(pedido);
+                registrosPedidos.descartarDespacho(pedido);
                 casi.setFueraDeServicio();
+                return false;
             }
-            return true; // <= mepa q no hay q devolver nada
         }
         return false;
     }
@@ -94,7 +95,7 @@ public class EmpresaLogistica {
     }
 
 
-    /*
+    /**
      * Obtiene el Casillero asociado a la posicion i, j de un pedido en especifico.
      * Param: ped el Pedido en el que se busca donde esta guardado
      * @return Casillero el casillero en donde esta metido ese Pedido

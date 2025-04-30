@@ -37,5 +37,7 @@ public class Main {
             Thread t = new Thread(p4, "Verificador " + i);
             //t.start();
         }
+
     }
+
 }

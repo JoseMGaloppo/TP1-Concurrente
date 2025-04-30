@@ -127,6 +127,7 @@ public class EmpresaLogistica {
         return false;
     }
 
+
     // Métodos para el proceso 4
     /* Al finalizar la ejecución, se debe verificar el estado final de los pedidos
     para asegurar que las operaciones se hayan realizado correctamente. Este proceso

@@ -27,9 +27,34 @@ public class RegistroPedidos {
         this.llaveVerificados = new Object();
     }
 
+
+
+
+
+
+
+
+
+    /**
+     * Registra un pedido en la lista de pedidos fallidos y setea el estado de pedido a FALLIDO
+     * @param pedido el pedido a registrar en la lista de pedidos fallidos y a setear el estado
+     */
+    public void descartarDespacho(Pedido pedido) {
+        addPedidoFallido(pedido);
+        pedido.setEstado(EstadoPedido.FALLIDO);
+    }
     public int generadorNumAleatorio(int size) {
         Random random = new Random();
-        return random.nextInt(size-1);
+        return random.nextInt(size);
+    }
+
+    /**Registra un pedido en la lista de verificados y setea el estado de pedido a verificado
+     * @param pedido
+     */
+
+    public  void verficarPedido(Pedido pedido) {
+        addPedidoVerificado(pedido);
+        pedido.setEstado(EstadoPedido.VERIFICADO);
     }
 
     // Aca tenemos que ver, cuales metodos tenemos que eliminar, ya que por ejemplo,
@@ -52,9 +77,9 @@ public class RegistroPedidos {
         }
     }
 
-    public void removePedidoEntregado() {
+    public Pedido removePedidoEntregado() {
         synchronized (this.llaveEntregados) {
-            entregados.remove(generadorNumAleatorio(entregados.size()));
+           return entregados.remove(generadorNumAleatorio(entregados.size()));
         }
     }
 
@@ -91,28 +116,8 @@ public class RegistroPedidos {
             verificados.remove(generadorNumAleatorio(verificados.size()));
         }
     }
+public List<Pedido> getEntregados(){
+        return entregados;
+}
 
-    // Mueve pedidos de entregados a verificados
-    public void moverEntregadosVerificados(int posicion) {
-        if (posicion >= 0 && posicion < entregados.size()) {
-            synchronized (this.llaveEntregados) {
-                Pedido pedido = entregados.remove(posicion);
-               synchronized (this.llaveVerificados) {
-                   verificados.add(pedido);
-               }
-           }
-        }
-    }
-
-    // Mueve pedidos de entregados a fallidos
-    public void moverEntregadosFallidos(int posicion) {
-        if (posicion >= 0 && posicion < entregados.size()) {
-            synchronized (this.llaveEntregados) {
-                Pedido pedido = entregados.remove(posicion);
-               synchronized (this.llaveFallidos) {
-                   fallidos.add(pedido);
-               }
-            }
-        }
-    }
 }

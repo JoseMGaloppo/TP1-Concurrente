@@ -12,3 +12,4 @@ public class Verificador extends Proceso implements Runnable {
     public void run() {
     }
 }
+

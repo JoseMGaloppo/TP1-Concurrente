@@ -6,8 +6,8 @@ public class PosicionCasillero {
     private int posj;
 
     public PosicionCasillero() {
-        this.posi = -1;
-        this.posj = -1;
+        this.posi = 0;
+        this.posj = 0;
     }
 
     public void setPosicion(int posi, int posj) {

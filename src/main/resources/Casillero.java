@@ -6,6 +6,7 @@ public class Casillero {
     private int contadorOcupado;
     private Pedido pedido;
     private final Object llaveOcupar, llaveDesocupar;
+    private String nombre;
 
     public Casillero() {
         this.estado = EstadoCasillero.VACIO;
@@ -35,6 +36,10 @@ public class Casillero {
         this.estado = EstadoCasillero.FUERADESERVICIO;
     }
 
+    public void setNombre (String nombre) {
+        this.nombre = nombre;
+    }
+
     /**
      * Este metodo ocupa el casillero si esta disponible, lo setea como ocupado, le asigna el pedido y aumenta el contador de ocupado
      * @param pedido el pedido a ocupar en el casillero
@@ -62,5 +67,9 @@ public class Casillero {
                 this.pedido = null;
             }
         }
+    }
+
+    public String toString() {
+        return this.nombre;
     }
 }

@@ -7,14 +7,18 @@ import java.util.Random;
 
 public class RegistroPedidos {
 
-    private List<Pedido> enPreparacion;
+    protected List<Pedido> enPreparacion;
     private List<Pedido> entregados;
     private List<Pedido> fallidos;
     private List<Pedido> enTransito;
-    private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito;
+    private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito,regDespacho,desDespacho;
 
     public RegistroPedidos() {
         this.enPreparacion = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Pedido pedido = new Pedido(EstadoPedido.EN_PREPARACION);
+            this.enPreparacion.add(pedido);
+        }
         this.entregados = new ArrayList<>();
         this.fallidos = new ArrayList<>();
         this.enTransito = new ArrayList<>();
@@ -24,6 +28,8 @@ public class RegistroPedidos {
         this.llaveEntregados = new Object();
         this.llaveFallidos = new Object();
         this.llaveEnTransito = new Object();
+        this.regDespacho = new Object();
+        this.desDespacho = new Object();
     }
 
     /**
@@ -31,8 +37,10 @@ public class RegistroPedidos {
      * @param pedido el pedido a registrar en la lista de pedidos en transito y a setear el estado
      */
     public void registrarDespacho(Pedido pedido) {
-        addPedidoEnTransito(pedido);
-        pedido.setEstado(EstadoPedido.EN_TRANSITO);
+        synchronized (regDespacho) {
+            addPedidoEnTransito(pedido);
+            pedido.setEstado(EstadoPedido.EN_TRANSITO);
+        }
     }
 
     /**
@@ -40,12 +48,10 @@ public class RegistroPedidos {
      * @param pedido el pedido a registrar en la lista de pedidos fallidos y a setear el estado
      */
     public void descartarDespacho(Pedido pedido) {
-        addPedidoFallido(pedido);
-        pedido.setEstado(EstadoPedido.FALLIDO);
-    }
-
-    public List<Pedido> getEnPreparacion() {
-        return enPreparacion;
+        synchronized (desDespacho) {
+            addPedidoFallido(pedido);
+            pedido.setEstado(EstadoPedido.FALLIDO);
+        }
     }
 
     public int generadorNumAleatorio(int size) {
@@ -73,7 +79,7 @@ public class RegistroPedidos {
 
     public Pedido removePedidoEntregado() {
         synchronized (this.llaveEntregados) {
-            return enPreparacion.remove(generadorNumAleatorio(entregados.size()));
+            return entregados.remove(generadorNumAleatorio(entregados.size()));
         }
     }
 
@@ -85,7 +91,7 @@ public class RegistroPedidos {
 
     public Pedido removePedidoFallido() {
         synchronized (this.llaveFallidos) {
-            return enPreparacion.remove(generadorNumAleatorio(fallidos.size()));
+            return fallidos.remove(generadorNumAleatorio(fallidos.size()));
         }
     }
 
@@ -97,7 +103,7 @@ public class RegistroPedidos {
 
     public Pedido removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
-            return enPreparacion.remove(generadorNumAleatorio(enTransito.size()));
+            return enTransito.remove(generadorNumAleatorio(enTransito.size()));
         }
     }
 }

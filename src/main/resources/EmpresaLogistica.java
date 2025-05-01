@@ -7,6 +7,7 @@ public class EmpresaLogistica {
     private Casillero[][] casilleros;
     protected RegistroPedidos registrosPedidos;
     private GeneradorPedidos generadorPedidos;
+    private Object verDespacho, obtCasillero;
 
     /**
      * Constructor de la clase EmpresaLogistica
@@ -16,10 +17,14 @@ public class EmpresaLogistica {
         casilleros = new Casillero[20][10];
         registrosPedidos = new RegistroPedidos();
         generadorPedidos = new GeneradorPedidos();
+        verDespacho = new Object();
+        obtCasillero = new Object();
 
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 10; j++) {
                 casilleros[i][j] = new Casillero();
+                Pedido pedido = new Pedido(EstadoPedido.EN_PREPARACION);
+                casilleros[i][j].ocupar(pedido);
             }
         }
     }
@@ -55,30 +60,6 @@ public class EmpresaLogistica {
         }
     }
 
-    /**
-     * Registra un pedido en la lista de pedidos en preparación
-     * @param pedido el pedido a registrar en la lista de pedidos en preparación
-     */
-    public void registrarPedidoPreparacion(Pedido pedido) {
-        this.registrosPedidos.addPedidoPreparacion(pedido);
-    }
-
-    /**
-     * Devuelve el generador de pedidos de la Empresa Logística
-     * @return
-     */
-    public GeneradorPedidos getGeneradorPedidos() {
-        return generadorPedidos;
-    }
-
-    /**
-     * Devuelve el registro de pedidos de la Empresa Logística
-     * @return
-     */
-    public RegistroPedidos getRegistroPedidos() {
-        return registrosPedidos;
-    }
-
     //MÉTODOS PROCESO 2 - DESPACHADOR DE PEDIDOS
 
     /**
@@ -86,22 +67,24 @@ public class EmpresaLogistica {
      * de estados y cambios entre listas necesarios.
      * @return true si hay pedidos en la lista y la informacion es correcta, false si la lista está vacía y la información es incorrecta
      */
-    public boolean verificarDespacho() {
-        if (!this.registrosPedidos.getEnPreparacion().isEmpty()) {
-            Pedido pedido = registrosPedidos.removePedidoPreparacion();
-            Casillero casi = obtenerCasillero(pedido);
+    public synchronized boolean verificarDespacho() {
+        synchronized(verDespacho) {
+            if (!this.registrosPedidos.enPreparacion.isEmpty()) {
+                Pedido pedido = registrosPedidos.removePedidoPreparacion();
+                Casillero casi = obtenerCasillero(pedido);
 
-            if (probabilidadDatos()) {
-                registrosPedidos.registrarDespacho(pedido);
-                casi.desocupar();
-                return true;
-            } else {
-                registrosPedidos.descartarDespacho(pedido);
-                casi.setFueraDeServicio();
-                return false;
+                if (probabilidadDatos()) {
+                    registrosPedidos.registrarDespacho(pedido);
+                    casi.desocupar();
+                    return true;
+                } else {
+                    registrosPedidos.descartarDespacho(pedido);
+                    casi.setFueraDeServicio();
+                    return false;
+                }
             }
+            return false;
         }
-        return false;
     }
 
     /**
@@ -110,7 +93,7 @@ public class EmpresaLogistica {
      */
     public boolean probabilidadDatos() {
         int numeroAleatorio = (int) (Math.random() * 100);
-        return numeroAleatorio < 85;
+        return numeroAleatorio < 50;
     }
 
     /**
@@ -119,8 +102,17 @@ public class EmpresaLogistica {
      * @return Casillero el casillero en donde esta metido ese Pedido
      * @param ped el pedido a obtener el casillero
      */
-    public Casillero obtenerCasillero(Pedido ped) {
-        return casilleros[ped.getPosicion().getPosi()][ped.getPosicion().getPosj()];
+    public synchronized Casillero obtenerCasillero(Pedido ped) {
+        synchronized (obtCasillero) {
+            int i = ped.getPosicion().getPosi();
+            int j = ped.getPosicion().getPosj();
+
+            if (i < 0 || i >= casilleros.length || j < 0 || j >= casilleros[0].length) {
+                throw new IllegalArgumentException("Índices fuera de rango: i=" + i + ", j=" + j);
+            }
+
+            return casilleros[i][j];
+        }
     }
 
 }

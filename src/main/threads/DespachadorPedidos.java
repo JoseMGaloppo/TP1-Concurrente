@@ -28,6 +28,20 @@ public class DespachadorPedidos extends Proceso implements Runnable {
      * De lo contrario, el casillero pasa a estado fuera de servicio y el pedido se marca como fallido, se elimina de "List<Pedido> enPreparacion" y se suma a "List<Pedido> fallidos"
      */
     @Override
-    public void run() {}
+    public void run() {
+        //System.out.println("a");
+        while (true) {
+            if (almacen.verificarDespacho()) {
+                System.out.println(Thread.currentThread().getName() + " - Pedido despachado");
+            } else {
+                System.out.println(Thread.currentThread().getName() + " - No hay pedidos para despachar");
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

@@ -161,6 +161,24 @@ public class EmpresaLogistica {
     verificados. En caso contrario, se elimina del registro de pedidos entregados y se inserta
     en el registro de pedidos fallidos. Este proceso es ejecutado por dos hilos. */
 
+    public boolean verificarPedidosEntregados() {
+        if(!this.registrosPedidos.getEntregados().isEmpty()) {
+            Pedido pedido = registrosPedidos.removePedidoEntregado();
+            Random random = new Random();
+            double probabilidad = random.nextDouble();
+            if(probabilidad <= 0.95) {
+                registrosPedidos.verficarPedido(pedido);
+                return true;
+            }
+            else{
+                registrosPedidos.descartarDespacho(pedido);
+                return false;
+            }
+
+        }
+        return false;
+    }
+
     public RegistroPedidos getRegistrosPedidos() {
         return registrosPedidos;
     }

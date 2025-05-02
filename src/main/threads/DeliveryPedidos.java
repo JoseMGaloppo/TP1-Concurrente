@@ -11,7 +11,7 @@ public class DeliveryPedidos extends Proceso implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!()) {
 
             System.out.println("Hilo: " + Thread.currentThread().getName() + " entregando pedido");
 

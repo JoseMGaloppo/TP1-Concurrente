@@ -2,11 +2,12 @@ package main.resources;
 
 public class Pedido {
 
+    private EstadoPedido estado;
     private PosicionCasillero posicion;
     private boolean procesado;
 
-    public Pedido(EstadoPedido estado) {
-        //this.estado = estado;
+    public Pedido() {
+        this.estado = null;
         this.procesado = false;
         this.posicion = new PosicionCasillero();
     }

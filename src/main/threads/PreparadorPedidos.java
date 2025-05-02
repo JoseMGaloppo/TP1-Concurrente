@@ -19,14 +19,16 @@ public class PreparadorPedidos extends Proceso implements Runnable {
         while (true) {
             try{
                 this.pedido = generadorPedidos.tomarPedido();
+                /*
                 if(this.pedido == null) {
                     throw new InterruptedException();
                 }
-                Thread.sleep(400);
+                 */
+                Thread.sleep(80);
                 almacen.prepararPedido(this.pedido);
-                Thread.sleep(1200);
+                Thread.sleep(200);
                 almacen.registrarPedidoPreparacion(this.pedido);
-                Thread.sleep(500);
+                Thread.sleep(100);
                 //notifyAll(); --> Deberia notificar a los de proceso2 que esperan a que hayan pedidos en casilleros.
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt();

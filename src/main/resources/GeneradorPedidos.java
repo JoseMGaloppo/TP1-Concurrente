@@ -12,7 +12,7 @@ public class GeneradorPedidos {
         this.cantidadPedidos = 500;
         // Llenar con 500 pedidos (el TP pide 500)
         for (int i = 1; i <= cantidadPedidos; i++) {
-            listaDePedidos.add(new Pedido(EstadoPedido.EN_PREPARACION));
+            listaDePedidos.add(new Pedido());
         }
     }
 

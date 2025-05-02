@@ -12,6 +12,7 @@ public class RegistroPedidos {
     private List<Pedido> enTransito;
     private List<Pedido> verificados;
     private int contadorPedidos;
+    private int contadorPedidoTransito;
     private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito, llaveVerificados;
 
     public RegistroPedidos() {
@@ -21,6 +22,7 @@ public class RegistroPedidos {
         this.enTransito = new ArrayList<>();
         this.verificados = new ArrayList<>();
         contadorPedidos = 0;
+        contadorPedidoTransito = 0;
         //Llaves para sincronizar las listas
         this.llavePreparacion = new Object();
         this.llaveEntregados = new Object();
@@ -114,6 +116,7 @@ public class RegistroPedidos {
         synchronized (this.llaveEnTransito) {
             while(enTransito.isEmpty()) {
                 try {
+                    System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para entregar.");
                     this.llaveEnTransito.wait();
                 }
                 catch(InterruptedException e) {

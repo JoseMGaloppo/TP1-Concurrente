@@ -33,6 +33,7 @@ public class PreparadorPedidos extends Proceso implements Runnable {
                 Thread.sleep(10);
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt();
+
             }
         }
 

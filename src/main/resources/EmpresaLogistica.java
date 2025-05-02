@@ -7,6 +7,7 @@ public class EmpresaLogistica {
     private Casillero[][] casilleros;
     private RegistroPedidos registrosPedidos;
 
+
     public EmpresaLogistica() {
         this.x = 20; // 20
         this.y = 10; // 10
@@ -22,6 +23,14 @@ public class EmpresaLogistica {
 
     }
 
+
+
+    /*
+    Métodos auxiliares
+     */
+
+
+
     // Métodos para el proceso 1
     public void prepararPedido(Pedido ped) {
         boolean casilleroEncontrado = false;
@@ -33,7 +42,7 @@ public class EmpresaLogistica {
         System.out.println(Thread.currentThread().getName() + " Ha preparado un pedido en" + " el casillero [" + casi.getPedido().getPosicion().getPosi() + "," + casi.getPedido().getPosicion().getPosj() + "]" + ". CONTADOR DE CASILLERO: " + casi.getContadorOcupado());
     }
 
-    /*
+    /**
      * Este metodo encuentra un casillero que este VACIO, al encontrarlo
      * modifica la PosicionCasillero en el pedido, y devuelve el casillero
      * disponible
@@ -113,6 +122,35 @@ public class EmpresaLogistica {
     confirma. Si el pedido es confirmado, se elimina del registro de pedidos en tránsito y se
     agrega al registro de pedidos entregados. Si el pedido no es confirmado, se elimina del
     registro de pedidos en tránsito y se agrega al registro de pedidos fallidos. */
+
+    /**
+     * Se entrega el pedido con un 90% de probabilidad de éxito.
+     *
+     * <p>Si la entrega es exitosa, el pedido se mueve desde el registro de
+     * pedidos en tránsito al registro de pedidos entregados. Si falla, se
+     * mueve al registro de pedidos fallidos.
+     * Solo se realiza la entrega si la lista de pedidos en tránsito no está vacía
+     *
+     * @return boolean
+     */
+
+    public void entregarPedido()  {
+        Random r = new Random();
+        boolean verificado = r.nextInt(100)<90;
+
+        if(verificado) {
+            this.registrosPedidos.addPedidoEntregado(this.registrosPedidos.removePedidoEnTransito());
+            System.out.println("El hilo *" + Thread.currentThread().getName() + "* entrego el pedido");
+        }
+
+        else {
+            this.registrosPedidos.addPedidoFallido(this.registrosPedidos.removePedidoEnTransito());
+            System.out.println("El hilo *" + Thread.currentThread().getName() + "* no pudo entregar el pedido debido a fallas tecnicas");
+        }
+
+    }
+
+
 
     // Métodos para el proceso 4
     /* Al finalizar la ejecución, se debe verificar el estado final de los pedidos

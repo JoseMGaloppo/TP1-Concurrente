@@ -32,7 +32,7 @@ public class Main {
         // Entregadores (3 hilos)
         for (int i = 1; i <= 3; i++) {
             Thread t = new Thread(new DeliveryPedidos(almacen), "Delivery Rappi " + i);
-            //t.start();
+            t.start();
         }
 
         // Verificadores (2 hilos)

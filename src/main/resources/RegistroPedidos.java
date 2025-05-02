@@ -95,6 +95,7 @@ public class RegistroPedidos {
         synchronized (this.llaveEntregados) {
             while(entregados.isEmpty()) {
                 try {
+                    System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para verificar.");
                     this.llaveEntregados.wait();
                 }
                 catch(InterruptedException e) {

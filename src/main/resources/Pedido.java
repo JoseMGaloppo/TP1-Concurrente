@@ -21,4 +21,8 @@ public class Pedido {
     public PosicionCasillero getPosicion() {
         return this.posicion;
     }
+
+    public void setEstado(EstadoPedido estado) {
+        this.estado = estado;
+    }
 }

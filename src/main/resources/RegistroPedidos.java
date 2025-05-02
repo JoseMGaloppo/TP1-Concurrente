@@ -24,58 +24,106 @@ public class RegistroPedidos {
         this.llaveEnTransito = new Object();
     }
 
+    /**
+     * Registra un pedido en la lista de pedidos en transito y setea el estado de pedido a EN_TRANSITO
+     * @param pedido el pedido a registrar en la lista de pedidos en transito y a setear el estado
+     */
+    public void registrarDespacho(Pedido pedido) {
+        addPedidoEnTransito(pedido);
+        pedido.setEstado(EstadoPedido.EN_TRANSITO);
+    }
+
+    public boolean isLista1Vacia() {
+        return enPreparacion.isEmpty();
+    }
+
+    public boolean isLista2Vacia() {
+        return enPreparacion.isEmpty();
+    }
+
+    /**
+     * Registra un pedido en la lista de pedidos fallidos y setea el estado de pedido a FALLIDO
+     * @param pedido el pedido a registrar en la lista de pedidos fallidos y a setear el estado
+     */
+    public void descartarDespacho(Pedido pedido) {
+        addPedidoFallido(pedido);
+        pedido.setEstado(EstadoPedido.FALLIDO);
+
+    }
+
+
     public int generadorNumAleatorio(int size) {
         Random random = new Random();
         return random.nextInt(size-1);
     }
 
-    // Aca tenemos que ver, cuales metodos tenemos que eliminar, ya que por ejemplo,
-    // Creo que no hay que quitar Pedidos de la ultima lista.
     public void addPedidoPreparacion(Pedido pedido) {
         synchronized (this.llavePreparacion) {
             enPreparacion.add(pedido);
+            llavePreparacion.notify(); //notify o notifyAll??
         }
     }
 
-    public void removePedidoPreparacion() {
+    public Pedido removePedidoPreparacion() {
         synchronized (this.llavePreparacion) {
-            enPreparacion.remove(generadorNumAleatorio(enPreparacion.size()));
+            if(enPreparacion.isEmpty()) {
+                try {
+                    this.llavePreparacion.wait();
+                }
+                catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return enPreparacion.remove(generadorNumAleatorio(enPreparacion.size()));
         }
     }
 
     public void addPedidoEntregado(Pedido pedido) {
         synchronized (this.llaveEntregados) {
             entregados.add(pedido);
+            llaveEntregados.notify();
         }
     }
 
-    public void removePedidoEntregado() {
+    public Pedido removePedidoEntregado() {
         synchronized (this.llaveEntregados) {
-            entregados.remove(generadorNumAleatorio(entregados.size()));
-        }
-    }
-
-    public void addPedidoFallido(Pedido pedido) {
-        synchronized (this.llaveFallidos) {
-            fallidos.add(pedido);
-        }
-    }
-
-    public void removePedidoFallido() {
-        synchronized (this.llaveFallidos) {
-            fallidos.remove(generadorNumAleatorio(fallidos.size()));
+            if(entregados.isEmpty()) {
+                try {
+                    this.llaveEntregados.wait();
+                }
+                catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return entregados.remove(generadorNumAleatorio(entregados.size()));
         }
     }
 
     public void addPedidoEnTransito(Pedido pedido) {
         synchronized (this.llaveEnTransito) {
             enTransito.add(pedido);
+            llaveEnTransito.notify();
         }
     }
 
-    public void removePedidoEnTransito() {
+    public Pedido removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
-            enTransito.remove(generadorNumAleatorio(enTransito.size()));
+            if(enTransito.isEmpty()) {
+                try {
+                    this.llaveEnTransito.wait();
+                }
+                catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return enTransito.remove(generadorNumAleatorio(enTransito.size()));
+        }
+    }
+
+    public void addPedidoFallido(Pedido pedido) {
+        synchronized (this.llaveFallidos) {
+            fallidos.add(pedido);
+            llaveFallidos.notify();
         }
     }
 }

@@ -29,7 +29,7 @@ public class DespachadorPedidos extends Proceso implements Runnable {
     public void run() {
         //System.out.println("a");
         while (true) {
-            if (almacen.verificarDespacho()) {
+            /*if (almacen.verificarDespacho()) {
                 System.out.println(Thread.currentThread().getName() + " - Pedido despachado");
             } else {
                 System.out.println(Thread.currentThread().getName() + " - No hay pedidos para despachar");
@@ -39,6 +39,7 @@ public class DespachadorPedidos extends Proceso implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+             */
         }
     }
 

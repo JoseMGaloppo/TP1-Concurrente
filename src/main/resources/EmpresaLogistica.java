@@ -70,19 +70,49 @@ public class EmpresaLogistica {
     pedido se marca como fallido, se elimina del registro de pedidos en preparación y se
     agrega al registro de pedidos fallidos. */
 
-    public void despacharPedido() {
-        // Agarra un elemento de la lista enPreparacion
-        //obtenerCasilleroPosicion(ped);
-        // Lo saca del Casillero y lo setea como ocupado
-        // Lo mete en la lista enTransito o si falla, lo mete al registro de pedidos fallidos y setea el casillero como FUERA DE SERVICIO
+    /**
+     * Verifica si la lista está vacía, en base al resultado se fija la probabilidad de que la información sea correcta, luego realiza los seteos
+     * de estados y cambios entre listas necesarios.
+     * @return true si hay pedidos en la lista y la informacion es correcta, false si la lista está vacía y la información es incorrecta
+     */
+    public void verificarDespacho() {
+        Pedido pedido = registrosPedidos.removePedidoPreparacion();
+        Casillero casi = obtenerCasillero(pedido);
+
+            if (probabilidadDatos()) {
+                registrosPedidos.registrarDespacho(pedido);
+                casi.desocupar();
+            }
+            else {
+                registrosPedidos.descartarDespacho(pedido);
+                casi.setFueraDeServicio();
+            }
     }
 
-    public void obtenerCasilleroPosicion(Pedido ped) {
-        Casillero casi = casilleros[ped.getPosicion().getPosi()][ped.getPosicion().getPosj()];
-        // NO FALLA
-        casi.desocupar(); // -> Lista enTransito
-        // FALLA 15%
-        casi.setFueraDeServicio(); // -> FUERA DE SERVICIO -> Lista fallidos
+    /**
+     * Genera un número aleatorio entre 0 y 100, y verifica si es menor a 85
+     * @return true si el número es menor a 85, false si no lo es
+     */
+    public boolean probabilidadDatos() {
+        int numeroAleatorio = (int) (Math.random() * 100);
+        return numeroAleatorio < 50;
+    }
+
+    /**
+     * Obtiene el Casillero asociado a la posicion i, j de un pedido en especifico.
+     * Param: ped el Pedido en el que se busca donde esta guardado
+     * @return Casillero el casillero en donde esta metido ese Pedido
+     * @param ped el pedido a obtener el casillero
+     */
+    public Casillero obtenerCasillero(Pedido ped) {
+
+            int i = ped.getPosicion().getPosi();
+            int j = ped.getPosicion().getPosj();
+
+            if (i < 0 || i >= casilleros.length || j < 0 || j >= casilleros[0].length) {
+                throw new IllegalArgumentException("Índices fuera de rango: i=" + i + ", j=" + j);
+            }
+            return casilleros[i][j];
     }
 
 

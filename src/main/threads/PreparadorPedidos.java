@@ -19,11 +19,6 @@ public class PreparadorPedidos extends Proceso implements Runnable {
         while (true) {
             try{
                 this.pedido = generadorPedidos.tomarPedido();
-                /*
-                if(this.pedido == null) {
-                    throw new InterruptedException();
-                }
-                 */
                 Thread.sleep(80);
                 almacen.prepararPedido(this.pedido);
                 Thread.sleep(200);

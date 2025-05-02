@@ -30,7 +30,7 @@ public class EmpresaLogistica {
             casi = getCasilleroDisponible(ped);
             casilleroEncontrado = casi.ocupar(ped);
         }
-        System.out.println(Thread.currentThread().getName() + " Ha preparado un pedido en" + " el casillero [" + casi.getPedido().getPosicion().getPosi() + "," + casi.getPedido().getPosicion().getPosj() + "]");
+        System.out.println(Thread.currentThread().getName() + " Ha preparado un pedido en" + " el casillero [" + casi.getPedido().getPosicion().getPosi() + "," + casi.getPedido().getPosicion().getPosj() + "]" + ". CONTADOR DE CASILLERO: " + casi.getContadorOcupado());
     }
 
     /*
@@ -66,7 +66,7 @@ public class EmpresaLogistica {
      * de estados y cambios entre listas necesarios.
      * @return true si hay pedidos en la lista y la informacion es correcta, false si la lista está vacía y la información es incorrecta
      */
-    public void procesarDespacho() {
+    public void procesarDespacho() throws SinDespachosException {
         Pedido pedido = registrosPedidos.removePedidoPreparacion();
         Casillero casi = obtenerCasillero(pedido);
 
@@ -77,7 +77,6 @@ public class EmpresaLogistica {
             else {
                 registrosPedidos.descartarDespacho(pedido);
                 casi.setFueraDeServicio();
-                pedido.setProcesado();
             }
     }
 

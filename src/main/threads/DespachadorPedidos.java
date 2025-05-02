@@ -28,9 +28,14 @@ public class DespachadorPedidos extends Proceso implements Runnable {
     @Override
     public void run() {
         while (true) {
-            almacen.procesarDespacho();
+            try {
+                almacen.procesarDespacho();
+            } catch (SinDespachosException e) {
+                System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para despachar. Finalizando ejecucion...");
+                return;
+            }
             try{
-                Thread.sleep(120);
+                Thread.sleep(12);
             }
             catch (InterruptedException e) {
                 e.printStackTrace();

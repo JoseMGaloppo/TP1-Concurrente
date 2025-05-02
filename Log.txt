@@ -54,3 +54,179 @@ Casilleros ocupados: 3
 Casilleros fuera de servicio: 0
 Total de ocupaciones: 3
 TIEMPO TOTAL DE EJECUCION: 210 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 0
+Total de ocupaciones: 3
+TIEMPO TOTAL DE EJECUCION: 218 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 0
+Total de ocupaciones: 3
+TIEMPO TOTAL DE EJECUCION: 230 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 0
+Total de ocupaciones: 3
+TIEMPO TOTAL DE EJECUCION: 218 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 0
+Total de ocupaciones: 3
+TIEMPO TOTAL DE EJECUCION: 222 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 198
+Casilleros ocupados: 0
+Casilleros fuera de servicio: 2
+Total de ocupaciones: 9
+TIEMPO TOTAL DE EJECUCION: 242 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 196
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 1
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 240 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 194
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 3
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 234 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 0
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 223 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 188
+Casilleros ocupados: 12
+Casilleros fuera de servicio: 0
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 241 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 196
+Casilleros ocupados: 1
+Casilleros fuera de servicio: 3
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 218 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 1
+Casilleros fuera de servicio: 2
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 237 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 195
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 2
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 228 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 198
+Casilleros ocupados: 0
+Casilleros fuera de servicio: 2
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 214 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 199
+Casilleros ocupados: 0
+Casilleros fuera de servicio: 1
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 223 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 0
+Casilleros fuera de servicio: 3
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 214 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 1
+Casilleros fuera de servicio: 2
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 218 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 195
+Casilleros ocupados: 2
+Casilleros fuera de servicio: 3
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 232 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 196
+Casilleros ocupados: 1
+Casilleros fuera de servicio: 3
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 224 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 196
+Casilleros ocupados: 1
+Casilleros fuera de servicio: 3
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 244 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 198
+Casilleros ocupados: 0
+Casilleros fuera de servicio: 2
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 215 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 198
+Casilleros ocupados: 1
+Casilleros fuera de servicio: 1
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 221 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 198
+Casilleros ocupados: 1
+Casilleros fuera de servicio: 1
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 241 ms

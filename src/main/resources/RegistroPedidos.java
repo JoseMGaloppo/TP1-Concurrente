@@ -11,6 +11,7 @@ public class RegistroPedidos {
     private List<Pedido> fallidos;
     private List<Pedido> enTransito;
     private List<Pedido> verificados;
+    private int contadorPedidos;
     private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito, llaveVerificados;
 
     public RegistroPedidos() {
@@ -19,6 +20,7 @@ public class RegistroPedidos {
         this.fallidos = new ArrayList<>();
         this.enTransito = new ArrayList<>();
         this.verificados = new ArrayList<>();
+        contadorPedidos = 0;
         //Llaves para sincronizar las listas
         this.llavePreparacion = new Object();
         this.llaveEntregados = new Object();
@@ -57,10 +59,15 @@ public class RegistroPedidos {
         }
     }
 
-    public Pedido removePedidoPreparacion() {
+    public Pedido removePedidoPreparacion() throws SinDespachosException {
         synchronized (this.llavePreparacion) {
             while(enPreparacion.isEmpty()) {
                 try {
+                    if (this.contadorPedidos == 500) {
+                        // Despertar a otros hilos que puedan estar esperando
+                        llavePreparacion.notifyAll();
+                        throw new SinDespachosException(""); // Esto detendrá el hilo en el catch
+                    }
                     System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para despachar.");
                     this.llavePreparacion.wait();
                 }
@@ -68,6 +75,8 @@ public class RegistroPedidos {
                     e.printStackTrace();
                 }
             }
+            contadorPedidos++;
+            System.out.println(this.contadorPedidos);
             return enPreparacion.remove(generadorNumAleatorio(enPreparacion.size()));
         }
     }

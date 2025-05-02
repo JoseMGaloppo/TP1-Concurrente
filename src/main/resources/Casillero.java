@@ -85,6 +85,7 @@ public class Casillero {
         synchronized (llaveDesocupar) {
             if(isOcupado()) {
                 setVacio();
+                System.out.println ("Se desocupo el casillero [" + this.pedido.getPosicion().getPosi() + "," + this.pedido.getPosicion().getPosj() + "]" );
                 //Pedido pedido = this.pedido;
                 this.pedido = null;
             }

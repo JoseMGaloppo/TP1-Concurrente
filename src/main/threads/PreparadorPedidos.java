@@ -18,7 +18,7 @@ public class PreparadorPedidos extends Proceso implements Runnable {
     @Override
     public void run() {
         while (true) {
-            try{
+            try {
                 this.pedido = generadorPedidos.tomarPedido();
             } catch (GeneradorVacioException e) {
                 System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para preparar. Finalizando ejecucion...");
@@ -26,11 +26,11 @@ public class PreparadorPedidos extends Proceso implements Runnable {
             }
 
             try{
-                Thread.sleep(150);
+                Thread.sleep(15);
                 almacen.prepararPedido(this.pedido);
-                Thread.sleep(200);
+                Thread.sleep(20);
                 almacen.registrarPedidoPreparacion(this.pedido);
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

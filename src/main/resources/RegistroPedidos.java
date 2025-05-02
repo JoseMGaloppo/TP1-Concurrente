@@ -10,36 +10,64 @@ public class RegistroPedidos {
     private List<Pedido> entregados;
     private List<Pedido> fallidos;
     private List<Pedido> enTransito;
-    private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito;
+    private List<Pedido> verificados;
+    private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito, llaveVerificados;
 
     public RegistroPedidos() {
         this.enPreparacion = new ArrayList<>();
         this.entregados = new ArrayList<>();
         this.fallidos = new ArrayList<>();
         this.enTransito = new ArrayList<>();
-
+        this.verificados = new ArrayList<>();
         //Llaves para sincronizar las listas
         this.llavePreparacion = new Object();
         this.llaveEntregados = new Object();
         this.llaveFallidos = new Object();
         this.llaveEnTransito = new Object();
+        this.llaveVerificados = new Object();
+    }
+
+    /**
+     * Registra un pedido en la lista de pedidos en transito y setea el estado de pedido a EN_TRANSITO
+     * @param pedido el pedido a registrar en la lista de pedidos en transito y a setear el estado
+     */
+    public void registrarDespacho(Pedido pedido) {
+        addPedidoEnTransito(pedido);
+        pedido.setEstado(EstadoPedido.EN_TRANSITO);
+    }
+
+    /**
+     * Registra un pedido en la lista de pedidos fallidos y setea el estado de pedido a FALLIDO
+     * @param pedido el pedido a registrar en la lista de pedidos fallidos y a setear el estado
+     */
+    public void descartarDespacho(Pedido pedido) {
+        addPedidoFallido(pedido);
+        pedido.setEstado(EstadoPedido.FALLIDO);
     }
 
     public int generadorNumAleatorio(int size) {
         Random random = new Random();
-        return random.nextInt(size-1);
+        return random.nextInt(size);
     }
 
-    // Aca tenemos que ver, cuales metodos tenemos que eliminar, ya que por ejemplo,
-    // Creo que no hay que quitar Pedidos de la ultima lista.
     public void addPedidoPreparacion(Pedido pedido) {
         synchronized (this.llavePreparacion) {
             enPreparacion.add(pedido);
+            llavePreparacion.notifyAll(); //notify o notifyAll??
         }
     }
 
     public Pedido removePedidoPreparacion() {
         synchronized (this.llavePreparacion) {
+            while(enPreparacion.isEmpty()) {
+                try {
+                    System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para despachar.");
+                    this.llavePreparacion.wait();
+                }
+                catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             return enPreparacion.remove(generadorNumAleatorio(enPreparacion.size()));
         }
     }
@@ -47,54 +75,67 @@ public class RegistroPedidos {
     public void addPedidoEntregado(Pedido pedido) {
         synchronized (this.llaveEntregados) {
             entregados.add(pedido);
+            llaveEntregados.notifyAll();
         }
     }
 
-    public void removePedidoEntregado() {
+    public Pedido removePedidoEntregado() {
         synchronized (this.llaveEntregados) {
-            entregados.remove(generadorNumAleatorio(entregados.size()));
-        }
-    }
-
-    public void addPedidoFallido(Pedido pedido) {
-        synchronized (this.llaveFallidos) {
-            fallidos.add(pedido);
-        }
-    }
-
-    public void removePedidoFallido() {
-        synchronized (this.llaveFallidos) {
-            fallidos.remove(generadorNumAleatorio(fallidos.size()));
+            while(entregados.isEmpty()) {
+                try {
+                    this.llaveEntregados.wait();
+                }
+                catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return entregados.remove(generadorNumAleatorio(entregados.size()));
         }
     }
 
     public void addPedidoEnTransito(Pedido pedido) {
         synchronized (this.llaveEnTransito) {
             enTransito.add(pedido);
+            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro en transito.");
+            llaveEnTransito.notifyAll();
         }
     }
 
     public Pedido removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
+            while(enTransito.isEmpty()) {
+                try {
+                    this.llaveEnTransito.wait();
+                }
+                catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             return enTransito.remove(generadorNumAleatorio(enTransito.size()));
         }
     }
 
-    public boolean isEmptyPreparacion() {
-        synchronized (this.llavePreparacion) {
-            return enPreparacion.isEmpty();
-        }
-    }
-
-    public boolean isEmptyEnTransito() {
+    public void addPedidoFallido(Pedido pedido) {
         synchronized (this.llaveFallidos) {
-            return enTransito.isEmpty();
+            fallidos.add(pedido);
+            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de fallidos.");
+            llaveFallidos.notifyAll();
         }
     }
 
-    public boolean isEmptyEntregados() {
-        synchronized (this.llaveEntregados) {
-            return entregados.isEmpty();
+    public void addPedidoVerificado(Pedido pedido) {
+        synchronized (this.llaveVerificados) {
+            verificados.add(pedido);
+            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de verificados.");
+            llaveVerificados.notifyAll();
         }
+    }
+
+    public int getCantidadFallidos() {
+        return fallidos.size();
+    }
+
+    public int getCantidadVerificados() {
+        return verificados.size();
     }
 }

@@ -9,7 +9,5 @@ public class DespachadorPedidos extends Proceso implements Runnable {
     }
 
     @Override
-    public void run() {
-
-    }
+    public void run() {}
 }

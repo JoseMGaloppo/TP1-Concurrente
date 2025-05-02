@@ -37,6 +37,18 @@ public class Casillero {
         this.estado = EstadoCasillero.FUERADESERVICIO;
     }
 
+    //Metodo hecho unicamente para testear la posicion en los casilleros
+    public Pedido getPedido() {
+        return this.pedido;
+    }
+
+    public int getContadorOcupado() {
+        return this.contadorOcupado;
+    }
+
+    public EstadoCasillero getEstado() {
+        return this.estado;
+    }
     /*
     * Intenta ocupar el casillero. Si esta disponible,
     * lo settea como ocupado, añade el pedido al Casillero,
@@ -67,6 +79,8 @@ public class Casillero {
     * NO SE si vamos a tener que poner un while() dentro del run() o dentro
     * del proceso en EmpresaLogistica para que vuelva a buscar en caso que
     * choque con un Casillero que ya estaba siendo ocupado o desocupado */
+
+    //Posible llave al pedo (llaveDesocupar)
     public void desocupar() {
         synchronized (llaveDesocupar) {
             if(isOcupado()) {

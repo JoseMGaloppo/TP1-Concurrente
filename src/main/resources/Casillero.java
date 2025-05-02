@@ -37,6 +37,11 @@ public class Casillero {
         this.estado = EstadoCasillero.FUERADESERVICIO;
     }
 
+    //Metodo hecho unicamente para testear la posicion en los casilleros
+    public Pedido getPedido() {
+        return this.pedido;
+    }
+
     /*
     * Intenta ocupar el casillero. Si esta disponible,
     * lo settea como ocupado, añade el pedido al Casillero,

@@ -9,32 +9,28 @@ public class Main {
     public static void main(String[] args) {
 
         EmpresaLogistica almacen = new EmpresaLogistica();
-        PreparadorPedidos venThread = new PreparadorPedidos(almacen);
-        DespachadorPedidos p2 = new DespachadorPedidos(almacen);
-        DeliveryPedidos p3 = new DeliveryPedidos(almacen);
-        VerificadorPedidos p4 = new VerificadorPedidos(almacen);
 
         // Preparadores (3 hilos)
         for (int i = 1; i <= 3; i++) {
-            Thread t = new Thread(venThread, "Preparador " + i);
+            Thread t = new Thread(new PreparadorPedidos(almacen), "Preparador " + i);
             t.start();
         }
 
         // Despachadores (2 hilos)
         for (int i = 1; i <= 2; i++) {
-            Thread t = new Thread(p2, "Despachador " + i);
+            Thread t = new Thread(new DespachadorPedidos(almacen), "Despachador " + i);
             //t.start();
         }
 
         // Entregadores (3 hilos)
         for (int i = 1; i <= 3; i++) {
-            Thread t = new Thread(p3, "Delivery Rappi " + i);
+            Thread t = new Thread(new DeliveryPedidos(almacen), "Delivery Rappi " + i);
             //t.start();
         }
 
         // Verificadores (2 hilos)
         for (int i = 1; i <= 2; i++) {
-            Thread t = new Thread(p4, "Verificador " + i);
+            Thread t = new Thread(new VerificadorPedidos(almacen), "Verificador " + i);
             //t.start();
         }
     }

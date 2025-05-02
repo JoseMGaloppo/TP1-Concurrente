@@ -33,14 +33,6 @@ public class RegistroPedidos {
         pedido.setEstado(EstadoPedido.EN_TRANSITO);
     }
 
-    public boolean isLista1Vacia() {
-        return enPreparacion.isEmpty();
-    }
-
-    public boolean isLista2Vacia() {
-        return enPreparacion.isEmpty();
-    }
-
     /**
      * Registra un pedido en la lista de pedidos fallidos y setea el estado de pedido a FALLIDO
      * @param pedido el pedido a registrar en la lista de pedidos fallidos y a setear el estado
@@ -48,25 +40,23 @@ public class RegistroPedidos {
     public void descartarDespacho(Pedido pedido) {
         addPedidoFallido(pedido);
         pedido.setEstado(EstadoPedido.FALLIDO);
-
     }
-
 
     public int generadorNumAleatorio(int size) {
         Random random = new Random();
-        return random.nextInt(size-1);
+        return random.nextInt(size);
     }
 
     public void addPedidoPreparacion(Pedido pedido) {
         synchronized (this.llavePreparacion) {
             enPreparacion.add(pedido);
-            llavePreparacion.notify(); //notify o notifyAll??
+            llavePreparacion.notifyAll(); //notify o notifyAll??
         }
     }
 
     public Pedido removePedidoPreparacion() {
         synchronized (this.llavePreparacion) {
-            if(enPreparacion.isEmpty()) {
+            while(enPreparacion.isEmpty()) {
                 try {
                     this.llavePreparacion.wait();
                 }
@@ -81,13 +71,13 @@ public class RegistroPedidos {
     public void addPedidoEntregado(Pedido pedido) {
         synchronized (this.llaveEntregados) {
             entregados.add(pedido);
-            llaveEntregados.notify();
+            llaveEntregados.notifyAll();
         }
     }
 
     public Pedido removePedidoEntregado() {
         synchronized (this.llaveEntregados) {
-            if(entregados.isEmpty()) {
+            while(entregados.isEmpty()) {
                 try {
                     this.llaveEntregados.wait();
                 }
@@ -102,13 +92,13 @@ public class RegistroPedidos {
     public void addPedidoEnTransito(Pedido pedido) {
         synchronized (this.llaveEnTransito) {
             enTransito.add(pedido);
-            llaveEnTransito.notify();
+            llaveEnTransito.notifyAll();
         }
     }
 
     public Pedido removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
-            if(enTransito.isEmpty()) {
+            while(enTransito.isEmpty()) {
                 try {
                     this.llaveEnTransito.wait();
                 }
@@ -123,7 +113,7 @@ public class RegistroPedidos {
     public void addPedidoFallido(Pedido pedido) {
         synchronized (this.llaveFallidos) {
             fallidos.add(pedido);
-            llaveFallidos.notify();
+            llaveFallidos.notifyAll();
         }
     }
 }

@@ -3,17 +3,19 @@ package main.resources;
 import java.util.Random;
 
 public class EmpresaLogistica {
-
+    private final int x, y;
     private Casillero[][] casilleros;
     private RegistroPedidos registrosPedidos;
 
     public EmpresaLogistica() {
-        casilleros = new Casillero[20][10];
+        x = 20; // 20
+        y = 10; // 10
+        casilleros = new Casillero[x][y];
         registrosPedidos = new RegistroPedidos();
 
         //Creo e instancio los casilleros de la matriz casilleros
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 10; j++) {
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
                 casilleros[i][j] = new Casillero();
             }
         }
@@ -21,19 +23,14 @@ public class EmpresaLogistica {
     }
 
     // Métodos para el proceso 1
-    /**
-     * Este proceso se encarga de recibir los pedidos de los usuarios. Se
-     * tienen tres hilos que ejecutan este proceso. Cada hilo intenta seleccionar un casillero
-     * aleatorio en la matriz, verificando que esté disponible. Si el casillero no está vacío, el hilo
-     * debe buscar otro casillero que sí lo esté. Una vez ocupado el casillero, el mismo se marca
-     * como ocupado y se registra el pedido en el registro de pedidos en preparación.
-     */
     public void prepararPedido(Pedido ped) {
         boolean casilleroEncontrado = false;
+        Casillero casi = null;
         while(!casilleroEncontrado) {
-            Casillero casi = getCasilleroDisponible(ped);
+            casi = getCasilleroDisponible(ped);
             casilleroEncontrado = casi.ocupar(ped);
         }
+        System.out.println(Thread.currentThread().getName() + " Ha preparado un pedido en" + " el casillero [" + casi.getPedido().getPosicion().getPosi() + "," + casi.getPedido().getPosicion().getPosj() + "]");
     }
 
     /*
@@ -60,22 +57,12 @@ public class EmpresaLogistica {
     }
 
     // Métodos para el proceso 2
-    /* Este proceso es ejecutado por dos hilos, y se encarga de despachar
-    los pedidos del listado de pedidos en preparación. Cada hilo toma un pedido aleatorio del
-    registro de pedidos en preparación y realiza una verificación de los datos del pedido y del
-    usuario. Se establece una probabilidad del 85% de que la información sea correcta y un
-    15% de que sea incorrecta. Si la información fue correcta, el casillero vuelve al estado
-    vacío, y el pedido se elimina del registro de pedidos en preparación y se agrega al registro
-    de pedidos en tránsito. De lo contrario, el casillero pasa a estado fuera de servicio y el
-    pedido se marca como fallido, se elimina del registro de pedidos en preparación y se
-    agrega al registro de pedidos fallidos. */
-
     /**
      * Verifica si la lista está vacía, en base al resultado se fija la probabilidad de que la información sea correcta, luego realiza los seteos
      * de estados y cambios entre listas necesarios.
      * @return true si hay pedidos en la lista y la informacion es correcta, false si la lista está vacía y la información es incorrecta
      */
-    public void verificarDespacho() {
+    public void procesarDespacho() {
         Pedido pedido = registrosPedidos.removePedidoPreparacion();
         Casillero casi = obtenerCasillero(pedido);
 

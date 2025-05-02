@@ -40,6 +40,14 @@ public class DespachadorPedidos extends Proceso implements Runnable {
                 e.printStackTrace();
             }
              */
+            almacen.procesarDespacho();
+            try{
+                Thread.sleep(180);
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 

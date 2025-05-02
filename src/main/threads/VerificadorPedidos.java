@@ -1,6 +1,7 @@
 package main.threads;
 
 import main.resources.EmpresaLogistica;
+import main.resources.SinEntregadosException;
 
 public class VerificadorPedidos extends Proceso implements Runnable {
 
@@ -10,24 +11,25 @@ public class VerificadorPedidos extends Proceso implements Runnable {
 
     @Override
     public void run() {
-        int verificados = 0;
-        while (verificados < 500){
 
-            System.out.println("Hilo: " + Thread.currentThread().getName() + " verificando pedidos entregados");
+        while (true){
 
-            verificados = almacen.verificarPedidosEntregados();
-            System.out.println("Verificados: " + verificados);
+          try {
+              almacen.verificarPedidosEntregados();
 
-            try {
+          }catch (SinEntregadosException e){
+              System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para verificar. Finalizando ejecucion...");
+              return;
+          }
+          try{
+              Thread.sleep(10);
+          }
+          catch(InterruptedException e){
+             e.printStackTrace();
+          }
 
-                Thread.sleep(10);
 
-            } catch (InterruptedException e) {
-
-               e.printStackTrace();
-
-            }
         }
-        System.out.println("Verificador de pedidos finalizado");
+
     }
 }

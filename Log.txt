@@ -4932,3 +4932,51 @@ FALLIDOS: 114 | VERIFICADOS: 386
 FALLIDOS: 114 | VERIFICADOS: 386
 FALLIDOS: 114 | VERIFICADOS: 386
 FALLIDOS: 114 | VERIFICADOS: 386
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 195
+Casilleros ocupados: 0
+Casilleros fuera de servicio: 5
+Total de ocupaciones: 9
+TIEMPO TOTAL DE EJECUCION: 213 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 196
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 1
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 213 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 0
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 213 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 2
+Casilleros fuera de servicio: 1
+Total de ocupaciones: 11
+TIEMPO TOTAL DE EJECUCION: 213 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 195
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 2
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 214 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 196
+Casilleros ocupados: 3
+Casilleros fuera de servicio: 1
+Total de ocupaciones: 12
+TIEMPO TOTAL DE EJECUCION: 235 ms

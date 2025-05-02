@@ -12,6 +12,7 @@ public class RegistroPedidos {
     private List<Pedido> enTransito;
     private List<Pedido> verificados;
     private int contadorPedidos;
+    private int contardorEntregados=0;
     private int contadorPedidoTransito;
     private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito, llaveVerificados;
 
@@ -91,16 +92,24 @@ public class RegistroPedidos {
         }
     }
 
-    public Pedido removePedidoEntregado() {
+    public Pedido removePedidoEntregado() throws SinEntregadosException {
         synchronized (this.llaveEntregados) {
             while(entregados.isEmpty()) {
                 try {
+                    if (this.contardorEntregados == 500) {
+                        //Despertar hilos
+                        llaveEntregados.notifyAll();
+                        throw new SinEntregadosException("");//detiene el hilo en le cath
+                    }
+                    System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para verificar.");
                     this.llaveEntregados.wait();
                 }
                 catch(InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            contardorEntregados++;
+            System.out.println("contador" + this.contardorEntregados);
             return entregados.remove(generadorNumAleatorio(entregados.size()));
         }
     }

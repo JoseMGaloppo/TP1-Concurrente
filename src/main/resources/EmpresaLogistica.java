@@ -6,6 +6,7 @@ public class EmpresaLogistica {
     private final int x, y;
     private Casillero[][] casilleros;
     private RegistroPedidos registrosPedidos;
+    private int hilosEnTransito;
 
 
     public EmpresaLogistica() {
@@ -13,6 +14,7 @@ public class EmpresaLogistica {
         this.y = 10; // 10
         casilleros = new Casillero[x][y];
         registrosPedidos = new RegistroPedidos();
+        hilosEnTransito = 2;
 
         //Creo e instancio los casilleros de la matriz casilleros
         for (int i = 0; i < x; i++) {
@@ -134,18 +136,32 @@ public class EmpresaLogistica {
      * @return boolean
      */
 
-    public void entregarPedido()  {
+    public boolean entregarPedido()  {
         Random r = new Random();
         boolean verificado = r.nextInt(100)<90;
+        if(!isEndProcesoTransito()){
+            if(verificado) {
+                this.registrosPedidos.addPedidoEntregado(this.registrosPedidos.removePedidoEnTransito());
+            }
 
-        if(verificado) {
-            this.registrosPedidos.addPedidoEntregado(this.registrosPedidos.removePedidoEnTransito());
+            else {
+                this.registrosPedidos.addPedidoFallido(this.registrosPedidos.removePedidoEnTransito());
+            }
+            return true;
         }
-
         else {
-            this.registrosPedidos.addPedidoFallido(this.registrosPedidos.removePedidoEnTransito());
+            return false;
         }
 
+
+    }
+
+    public boolean isEndProcesoTransito(){
+        return hilosEnTransito == 0;
+    }
+
+    public void removeHilosEnTransito(){
+        hilosEnTransito--;
     }
 
 

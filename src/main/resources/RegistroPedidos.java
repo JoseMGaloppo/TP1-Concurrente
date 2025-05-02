@@ -115,13 +115,14 @@ public class RegistroPedidos {
 
     public Pedido removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
+
             while(enTransito.isEmpty()) {
                 try {
                     System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para entregar.");
                     this.llaveEnTransito.wait();
-                }
-                catch(InterruptedException e) {
-                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt(); // buena práctica
+                    return null;
                 }
             }
             return enTransito.remove(generadorNumAleatorio(enTransito.size()));

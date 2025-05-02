@@ -2,6 +2,7 @@ package main.threads;
 
 import main.resources.EmpresaLogistica;
 import main.resources.GeneradorPedidos;
+import main.resources.GeneradorVacioException;
 import main.resources.Pedido;
 
 public class PreparadorPedidos extends Proceso implements Runnable {
@@ -9,26 +10,26 @@ public class PreparadorPedidos extends Proceso implements Runnable {
     private Pedido pedido;
     private GeneradorPedidos generadorPedidos;
 
-    public PreparadorPedidos(EmpresaLogistica almacen) {
+    public PreparadorPedidos(EmpresaLogistica almacen, GeneradorPedidos generadorPedidos) {
         super(almacen);
-        generadorPedidos = new GeneradorPedidos();
+        this.generadorPedidos = generadorPedidos;
     }
 
     @Override
     public void run() {
-        int pedidosProcesados = 0;
         while (true) {
             try{
                 this.pedido = generadorPedidos.tomarPedido();
-                if (this.pedido == null) {
-                    System.out.println("Se han procesado " + pedidosProcesados + " pedidos.");
-                    break;
-                }
+            } catch (GeneradorVacioException e) {
+                System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para preparar. Finalizando ejecucion...");
+                return;
+            }
+
+            try{
                 Thread.sleep(8);
                 almacen.prepararPedido(this.pedido);
                 Thread.sleep(2);
                 almacen.registrarPedidoPreparacion(this.pedido);
-                pedidosProcesados++;
                 Thread.sleep(1);
 
             } catch(InterruptedException e) {

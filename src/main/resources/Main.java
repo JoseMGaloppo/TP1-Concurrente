@@ -9,10 +9,11 @@ public class Main {
     public static void main(String[] args) {
 
         EmpresaLogistica almacen = new EmpresaLogistica();
+        GeneradorPedidos generador = new GeneradorPedidos();
 
         // Preparadores (3 hilos)
         for (int i = 1; i <= 3; i++) {
-            Thread t = new Thread(new PreparadorPedidos(almacen), "Preparador " + i);
+            Thread t = new Thread(new PreparadorPedidos(almacen, generador), "Preparador " + i);
             t.start();
         }
 

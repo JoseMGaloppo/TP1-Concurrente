@@ -4,21 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GeneradorPedidos {
-    private List<Pedido> listaDePedidos;
+    private List<Pedido> pedidos;
     private final int cantidadPedidos;
 
     public GeneradorPedidos() {
-        listaDePedidos = new ArrayList<>();
+        pedidos = new ArrayList<>();
         this.cantidadPedidos = 500;
         // Llenar con 500 pedidos (el TP pide 500)
-        for (int i = 1; i <= cantidadPedidos; i++) {
-            listaDePedidos.add(new Pedido());
+        for (int i = 0; i < cantidadPedidos; i++) {
+            pedidos.add(new Pedido());
         }
     }
 
     // Método sincronizado para tomar un pedido
-    public synchronized Pedido tomarPedido() {
-            return listaDePedidos.removeFirst();
-    }
+    public synchronized Pedido tomarPedido() throws GeneradorVacioException {
+        if(pedidos.size() == 0) {
+            throw new GeneradorVacioException("");
+        }
 
+        return pedidos.removeFirst();
+    }
 }

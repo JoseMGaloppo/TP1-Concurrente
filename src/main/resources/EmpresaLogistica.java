@@ -3,26 +3,38 @@ package main.resources;
 import java.util.Random;
 
 public class EmpresaLogistica {
+
     private final int x, y;
     private Casillero[][] casilleros;
-    private RegistroPedidos registrosPedidos;
+    protected RegistroPedidos registrosPedidos;
+    private GeneradorPedidos generadorPedidos;
+    private Object verDespacho, obtCasillero;
     private boolean sinPedidos;
 
+    /**
+     * Constructor de la clase EmpresaLogistica
+     * Comienza con 200 casilleros vacios, un registro de pedidos y un generador de pedidos
+     */
     public EmpresaLogistica() {
+
         this.x = 20; // 20
         this.y = 10; // 10
+
         casilleros = new Casillero[x][y];
         registrosPedidos = new RegistroPedidos();
+        generadorPedidos = new GeneradorPedidos();
+        verDespacho = new Object();
+        obtCasillero = new Object();
 
-        //Creo e instancio los casilleros de la matriz casilleros
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 10; j++) {
                 casilleros[i][j] = new Casillero();
+                Pedido pedido = new Pedido();
+                casilleros[i][j].ocupar(pedido);
             }
         }
 
         sinPedidos = false;
-
     }
 
     public void setSinPedidos(){

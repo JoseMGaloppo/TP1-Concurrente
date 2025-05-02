@@ -12,11 +12,14 @@ public class GeneradorPedidos {
         this.cantidadPedidos = 500;
         // Llenar con 500 pedidos (el TP pide 500)
         for (int i = 1; i <= cantidadPedidos; i++) {
-            listaDePedidos.add(new Pedido(EstadoPedido.EN_PREPARACION));
+            listaDePedidos.add(new Pedido());
         }
     }
 
-    // Método sincronizado para tomar un pedido
+    /**
+     * Se toma un pedido de la lista de pedidos y se elimina de ésta.
+     * @return Pedido
+     */
     public synchronized Pedido tomarPedido() {
         if (!listaDePedidos.isEmpty()) {
             // Saca el primer pedido de la lista

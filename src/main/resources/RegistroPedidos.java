@@ -19,6 +19,8 @@ public class RegistroPedidos {
         this.fallidos = new ArrayList<>();
         this.enTransito = new ArrayList<>();
         this.verificados = new ArrayList<>();
+
+
         //Llaves para sincronizar las listas
         this.llavePreparacion = new Object();
         this.llaveEntregados = new Object();
@@ -137,5 +139,15 @@ public class RegistroPedidos {
 
     public int getCantidadVerificados() {
         return verificados.size();
+    }
+
+
+    /**
+     * Devuelve true si lista de pedidos en transito está vacia. Sino false
+     * @return boolean
+     */
+
+    public boolean isEmptyEnTransito(){
+        return enTransito.isEmpty();
     }
 }

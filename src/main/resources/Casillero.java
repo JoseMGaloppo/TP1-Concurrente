@@ -42,6 +42,13 @@ public class Casillero {
         return this.pedido;
     }
 
+    public int getContadorOcupado() {
+        return this.contadorOcupado;
+    }
+
+    public EstadoCasillero getEstado() {
+        return this.estado;
+    }
     /*
     * Intenta ocupar el casillero. Si esta disponible,
     * lo settea como ocupado, añade el pedido al Casillero,

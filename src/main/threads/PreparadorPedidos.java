@@ -26,32 +26,15 @@ public class PreparadorPedidos extends Proceso implements Runnable {
             }
 
             try{
-                Thread.sleep(8);
+                Thread.sleep(150);
                 almacen.prepararPedido(this.pedido);
-                Thread.sleep(2);
+                Thread.sleep(200);
                 almacen.registrarPedidoPreparacion(this.pedido);
-                Thread.sleep(1);
-
+                Thread.sleep(100);
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
 
     }
-
-    /**
-     *
-     * @param listaPedido
-     */
-
-    /*
-    private void tomarPedido(GeneradorPedidos listaPedido) {
-        this.pedido = listaPedido.tomarPedido();
-    }
-
-    private void colocarPedido(EmpresaLogistica almacen, Pedido pedido) {
-        almacen.getCasilleroDisponible().ocupar(pedido);
-    }
-
-     */
 }

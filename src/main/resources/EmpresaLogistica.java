@@ -52,6 +52,10 @@ public class EmpresaLogistica {
         }
     }
 
+    public Casillero[][] getCasilleros() {
+        return casilleros;
+    }
+
     public void registrarPedidoPreparacion(Pedido pedido) {
         this.registrosPedidos.addPedidoPreparacion(pedido);
     }
@@ -73,6 +77,7 @@ public class EmpresaLogistica {
             else {
                 registrosPedidos.descartarDespacho(pedido);
                 casi.setFueraDeServicio();
+                pedido.setProcesado();
             }
     }
 
@@ -119,4 +124,7 @@ public class EmpresaLogistica {
     verificados. En caso contrario, se elimina del registro de pedidos entregados y se inserta
     en el registro de pedidos fallidos. Este proceso es ejecutado por dos hilos. */
 
+    public RegistroPedidos getRegistrosPedidos() {
+        return registrosPedidos;
+    }
 }

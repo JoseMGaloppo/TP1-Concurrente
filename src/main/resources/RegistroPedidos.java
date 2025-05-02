@@ -10,18 +10,21 @@ public class RegistroPedidos {
     private List<Pedido> entregados;
     private List<Pedido> fallidos;
     private List<Pedido> enTransito;
-    private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito;
+    private List<Pedido> verificados;
+    private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito, llaveVerificados;
 
     public RegistroPedidos() {
         this.enPreparacion = new ArrayList<>();
         this.entregados = new ArrayList<>();
         this.fallidos = new ArrayList<>();
         this.enTransito = new ArrayList<>();
+        this.verificados = new ArrayList<>();
         //Llaves para sincronizar las listas
         this.llavePreparacion = new Object();
         this.llaveEntregados = new Object();
         this.llaveFallidos = new Object();
         this.llaveEnTransito = new Object();
+        this.llaveVerificados = new Object();
     }
 
     /**
@@ -118,5 +121,21 @@ public class RegistroPedidos {
             System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de fallidos.");
             llaveFallidos.notifyAll();
         }
+    }
+
+    public void addPedidoVerificado(Pedido pedido) {
+        synchronized (this.llaveVerificados) {
+            verificados.add(pedido);
+            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de verificados.");
+            llaveVerificados.notifyAll();
+        }
+    }
+
+    public int getCantidadFallidos() {
+        return fallidos.size();
+    }
+
+    public int getCantidadVerificados() {
+        return verificados.size();
     }
 }

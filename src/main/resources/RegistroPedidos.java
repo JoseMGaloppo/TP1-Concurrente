@@ -113,12 +113,15 @@ public class RegistroPedidos {
         }
     }
 
-    public Pedido removePedidoEnTransito() {
+    public Pedido removePedidoEnTransito(boolean isEndEnTransito) {
         synchronized (this.llaveEnTransito) {
 
             while(enTransito.isEmpty()) {
                 try {
                     System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para entregar.");
+                    if(isEndEnTransito){
+                        return null;
+                    }
                     this.llaveEnTransito.wait();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt(); // buena práctica

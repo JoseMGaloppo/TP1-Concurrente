@@ -141,19 +141,17 @@ public class EmpresaLogistica {
         boolean verificado = r.nextInt(100)<90;
         if(!isEndProcesoTransito()){
             if(verificado) {
-                this.registrosPedidos.addPedidoEntregado(this.registrosPedidos.removePedidoEnTransito());
+                this.registrosPedidos.addPedidoEntregado(this.registrosPedidos.removePedidoEnTransito(this.isEndProcesoTransito()));
             }
 
             else {
-                this.registrosPedidos.addPedidoFallido(this.registrosPedidos.removePedidoEnTransito());
+                this.registrosPedidos.addPedidoFallido(this.registrosPedidos.removePedidoEnTransito(this.isEndProcesoTransito()));
             }
             return true;
         }
         else {
             return false;
         }
-
-
     }
 
     public boolean isEndProcesoTransito(){

@@ -54,6 +54,11 @@ public class RegistroPedidos {
         return random.nextInt(size);
     }
 
+    public  void verficarPedido(Pedido pedido) {
+        addPedidoVerificado(pedido);
+
+    }
+
     public void addPedidoPreparacion(Pedido pedido) {
         synchronized (this.llavePreparacion) {
             enPreparacion.add(pedido);
@@ -149,5 +154,10 @@ public class RegistroPedidos {
 
     public int getCantidadVerificados() {
         return verificados.size();
+
+    }
+
+    public List<Pedido> getEntregados(){
+        return entregados;
     }
 }

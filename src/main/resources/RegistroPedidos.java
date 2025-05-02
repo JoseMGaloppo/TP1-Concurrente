@@ -54,10 +54,6 @@ public class RegistroPedidos {
         return random.nextInt(size);
     }
 
-    public  void verficarPedido(Pedido pedido) {
-        addPedidoVerificado(pedido);
-
-    }
 
     public void addPedidoPreparacion(Pedido pedido) {
         synchronized (this.llavePreparacion) {

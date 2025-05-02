@@ -38,8 +38,9 @@ public class Main {
         // Verificadores (2 hilos)
         for (int i = 1; i <= 2; i++) {
             Thread t = new Thread(new VerificadorPedidos(almacen), "Verificador " + i);
-            //t.start();
+            t.start();
         }
+
 
         logger.detener();
         try{

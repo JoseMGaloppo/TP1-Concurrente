@@ -10,12 +10,13 @@ public class VerificadorPedidos extends Proceso implements Runnable {
 
     @Override
     public void run() {
-
-        while (true){
+        int verificados = 0;
+        while (verificados < 500){
 
             System.out.println("Hilo: " + Thread.currentThread().getName() + " verificando pedidos entregados");
 
-            almacen.verificarPedidosEntregados();
+            verificados = almacen.verificarPedidosEntregados();
+            System.out.println("Verificados: " + verificados);
 
             try {
 
@@ -27,5 +28,6 @@ public class VerificadorPedidos extends Proceso implements Runnable {
 
             }
         }
+        System.out.println("Verificador de pedidos finalizado");
     }
 }

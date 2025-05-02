@@ -19,7 +19,7 @@ public class Main {
         // Despachadores (2 hilos)
         for (int i = 1; i <= 2; i++) {
             Thread t = new Thread(new DespachadorPedidos(almacen), "Despachador " + i);
-            //t.start();
+            t.start();
         }
 
         // Entregadores (3 hilos)

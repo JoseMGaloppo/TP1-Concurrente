@@ -58,6 +58,7 @@ public class RegistroPedidos {
         synchronized (this.llavePreparacion) {
             while(enPreparacion.isEmpty()) {
                 try {
+                    System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para despachar.");
                     this.llavePreparacion.wait();
                 }
                 catch(InterruptedException e) {
@@ -92,6 +93,7 @@ public class RegistroPedidos {
     public void addPedidoEnTransito(Pedido pedido) {
         synchronized (this.llaveEnTransito) {
             enTransito.add(pedido);
+            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro en transito.");
             llaveEnTransito.notifyAll();
         }
     }
@@ -113,6 +115,7 @@ public class RegistroPedidos {
     public void addPedidoFallido(Pedido pedido) {
         synchronized (this.llaveFallidos) {
             fallidos.add(pedido);
+            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de fallidos.");
             llaveFallidos.notifyAll();
         }
     }

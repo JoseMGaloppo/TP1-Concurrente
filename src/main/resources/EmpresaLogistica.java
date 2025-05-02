@@ -8,8 +8,8 @@ public class EmpresaLogistica {
     private RegistroPedidos registrosPedidos;
 
     public EmpresaLogistica() {
-        x = 20; // 20
-        y = 10; // 10
+        this.x = 20; // 20
+        this.y = 10; // 10
         casilleros = new Casillero[x][y];
         registrosPedidos = new RegistroPedidos();
 
@@ -42,8 +42,8 @@ public class EmpresaLogistica {
         Random random = new Random();
         int i = 0, j = 0;
         while(true) {
-            i = random.nextInt(20); // fila aleatoria (0-19)
-            j = random.nextInt(10); // columna aleatoria (0-9)
+            i = random.nextInt(x); // fila aleatoria (0-19)
+            j = random.nextInt(y); // columna aleatoria (0-9)
             Casillero casi = casilleros[i][j];
             if(casi.isDisponible()) {
                 pediilo.getPosicion().setPosicion(i, j);
@@ -81,8 +81,8 @@ public class EmpresaLogistica {
      * @return true si el número es menor a 85, false si no lo es
      */
     public boolean probabilidadDatos() {
-        int numeroAleatorio = (int) (Math.random() * 100);
-        return numeroAleatorio < 50;
+        double numeroAleatorio = (Math.random());
+        return numeroAleatorio < 0.85;
     }
 
     /**

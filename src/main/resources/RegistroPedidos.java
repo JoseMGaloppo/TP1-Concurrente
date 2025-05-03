@@ -13,6 +13,10 @@ public class RegistroPedidos {
     private List<Pedido> verificados;
     private int contadorPedidos;
     private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito, llaveVerificados;
+    private volatile boolean despachoFinalizado;
+    private volatile boolean entregaFinalizada;
+    private int despachadoresActivos;
+    private int entregadoresActivos;
 
     public RegistroPedidos() {
         this.enPreparacion = new ArrayList<>();
@@ -28,6 +32,11 @@ public class RegistroPedidos {
         this.llaveFallidos = new Object();
         this.llaveEnTransito = new Object();
         this.llaveVerificados = new Object();
+
+        despachoFinalizado = false;
+        entregaFinalizada = false;
+        despachadoresActivos = 2;
+        entregadoresActivos = 3;
     }
 
     /**
@@ -83,27 +92,28 @@ public class RegistroPedidos {
         }
     }
 
-    public void addPedidoEntregado(Pedido pedido) {
-        synchronized (this.llaveEntregados) {
-            entregados.add(pedido);
-            llaveEntregados.notifyAll();
-        }
-    }
+
 
     public Pedido removePedidoEntregado() {
         synchronized (this.llaveEntregados) {
+
             while(entregados.isEmpty()) {
                 try {
-                    System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para verificar.");
+                    System.out.println(Thread.currentThread().getName() + ": Esperando VERIFICAR un pedido entregado.");
+                    if (entregaFinalizada){
+                        throw new InterruptedException();
+
+                    }
                     this.llaveEntregados.wait();
-                }
-                catch(InterruptedException e) {
-                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt(); // buena práctica
+                    return null;
                 }
             }
             return entregados.remove(generadorNumAleatorio(entregados.size()));
         }
     }
+
 
     public void addPedidoEnTransito(Pedido pedido) {
         synchronized (this.llaveEnTransito) {
@@ -113,12 +123,28 @@ public class RegistroPedidos {
         }
     }
 
+    public void procesoDespachoFin(){
+        synchronized (this.llaveEnTransito) {
+            this.despachadoresActivos--;
+            System.out.println("QUEDAN: " + this.despachadoresActivos + " trabajadores");
+            if(despachadoresActivos == 0) {
+                despachoFinalizado = true;
+                llaveEnTransito.notifyAll();
+            }
+        }
+
+    }
+
     public Pedido removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
 
             while(enTransito.isEmpty()) {
                 try {
                     System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para entregar.");
+                    if (despachoFinalizado){
+                        throw new InterruptedException();
+
+                    }
                     this.llaveEnTransito.wait();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt(); // buena práctica
@@ -126,6 +152,45 @@ public class RegistroPedidos {
                 }
             }
             return enTransito.remove(generadorNumAleatorio(enTransito.size()));
+        }
+    }
+
+    public void addPedidoEntregado(Pedido pedido) {
+        synchronized (this.llaveEntregados) {
+            entregados.add(pedido);
+            llaveEntregados.notifyAll();
+        }
+    }
+
+    public void procesoEntregaFin(){
+        synchronized (this.llaveEntregados) {
+            this.entregadoresActivos--;
+            System.out.println("QUEDAN: " + this.entregadoresActivos + " trabajadores");
+            if(entregadoresActivos == 0) {
+                entregaFinalizada = true;
+                llaveEntregados.notifyAll();
+            }
+        }
+
+    }
+
+    public Pedido removePedidoEntregado() {
+        synchronized (this.llaveEntregados) {
+
+            while(entregados.isEmpty()) {
+                try {
+                    System.out.println(Thread.currentThread().getName() + ": Esperando VERIFICAR un pedido entregado.");
+                    if (entregaFinalizada){
+                        throw new InterruptedException();
+
+                    }
+                    this.llaveEntregados.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt(); // buena práctica
+                    return null;
+                }
+            }
+            return entregados.remove(generadorNumAleatorio(entregados.size()));
         }
     }
 
@@ -154,7 +219,5 @@ public class RegistroPedidos {
 
     }
 
-    public List<Pedido> getEntregados(){
-        return entregados;
-    }
+
 }

@@ -139,31 +139,32 @@ public class EmpresaLogistica {
     public boolean entregarPedido()  {
         Random r = new Random();
         boolean verificado = r.nextInt(100)<90;
-        if(!isEndProcesoTransito()){
-            if(verificado) {
-                this.registrosPedidos.addPedidoEntregado(this.registrosPedidos.removePedidoEnTransito());
-            }
 
-            else {
-                this.registrosPedidos.addPedidoFallido(this.registrosPedidos.removePedidoEnTransito());
-            }
-            return true;
-        }
-        else {
+        Pedido pedido = this.registrosPedidos.removePedidoEnTransito();
+        if(pedido == null) {
             return false;
         }
+        else {
+            if(verificado){
+                this.registrosPedidos.addPedidoEntregado(pedido);
+            }
+            else {
+                this.registrosPedidos.addPedidoFallido(pedido);
+            }
 
+            return true;
+        }
 
     }
 
-    public boolean isEndProcesoTransito(){
-        return hilosEnTransito == 0;
+
+    public void procesoDespachoFin(){
+        registrosPedidos.procesoDespachoFin();
     }
 
-    public void removeHilosEnTransito(){
-        hilosEnTransito--;
+    public void procesoEntregaFin(){
+        registrosPedidos.procesoEntregaFin();
     }
-
 
 
     // Métodos para el proceso 4
@@ -175,17 +176,25 @@ public class EmpresaLogistica {
     verificados. En caso contrario, se elimina del registro de pedidos entregados y se inserta
     en el registro de pedidos fallidos. Este proceso es ejecutado por dos hilos. */
 
-    public int verificarPedidosEntregados() {
+ 
+    public boolean verificarPedidosEntregados() {
+
         Pedido pedido = registrosPedidos.removePedidoEntregado();
         Random r = new Random();
         boolean verificado = r.nextInt(100)<95;
-        if(verificado) {
-            this.registrosPedidos.addPedidoVerificado(pedido);
 
+        if(pedido == null) {
+            return false;
         }
         else {
-            this.registrosPedidos.descartarDespacho(pedido);
+            if(verificado){
+                this.registrosPedidos.addPedidoVerificado(pedido);
+            }
+            else {
+                this.registrosPedidos.addPedidoFallido(pedido);
+            }
 
+            return true;
         }
         return registrosPedidos.getCantidadFallidos() + registrosPedidos.getCantidadVerificados();
     }

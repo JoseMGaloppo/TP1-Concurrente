@@ -56,7 +56,6 @@ public class Casillero {
     * En caso que no esté disponible, devuelve false.
     * @param pedido El pedido a colocar en el Casillero
     */
-
     public boolean ocupar(Pedido pedido) {
         synchronized(llaveOcupar) {
             if (isDisponible()) {

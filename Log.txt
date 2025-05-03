@@ -230,3 +230,11 @@ Casilleros ocupados: 1
 Casilleros fuera de servicio: 1
 Total de ocupaciones: 12
 TIEMPO TOTAL DE EJECUCION: 241 ms
+FALLIDOS: 0 | VERIFICADOS: 0
+
+--- ESTADISTICAS FINALES ---
+Casilleros vacíos: 197
+Casilleros ocupados: 1
+Casilleros fuera de servicio: 2
+Total de ocupaciones: 10
+TIEMPO TOTAL DE EJECUCION: 215 ms

@@ -41,12 +41,19 @@ public class Main {
             t.start();
         }
 
+
         logger.detener();
         try{
             loggerT.join();
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+
+
+
+
+
 
     }
 }

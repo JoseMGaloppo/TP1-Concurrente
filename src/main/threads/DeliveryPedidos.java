@@ -21,7 +21,7 @@ public class DeliveryPedidos extends Proceso implements Runnable {
             else {
                 System.out.println("No hay más pedidos para entregar");
                 System.out.println("Hilo: " + Thread.currentThread().getName() + " saliendo");
-
+                almacen.procesoEntregaFin();
                 return;
             }
 

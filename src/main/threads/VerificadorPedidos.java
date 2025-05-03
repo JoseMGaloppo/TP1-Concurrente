@@ -15,7 +15,16 @@ public class VerificadorPedidos extends Proceso implements Runnable {
 
             System.out.println("Hilo: " + Thread.currentThread().getName() + " verificando pedidos entregados");
 
-            almacen.verificarPedidosEntregados();
+
+            if(almacen.verificarPedidosEntregados()){
+                System.out.println("Hilo: " + Thread.currentThread().getName() + " verificando pedido");
+            }
+            else {
+                System.out.println("No hay más pedidos para verificar");
+                System.out.println("Hilo: " + Thread.currentThread().getName() + " saliendo");
+
+                return;
+            }
 
             try {
 

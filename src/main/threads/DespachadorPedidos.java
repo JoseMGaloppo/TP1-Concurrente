@@ -32,7 +32,7 @@ public class DespachadorPedidos extends Proceso implements Runnable {
                 almacen.procesarDespacho();
             } catch (SinDespachosException e) {
                 System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para despachar. Finalizando ejecucion...");
-                almacen.removeHilosEnTransito();
+                almacen.procesoDespachoFin();
                 return;
             }
             try{
@@ -40,6 +40,7 @@ public class DespachadorPedidos extends Proceso implements Runnable {
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
+
             }
 
         }

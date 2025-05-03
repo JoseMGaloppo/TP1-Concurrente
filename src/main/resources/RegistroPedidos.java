@@ -12,7 +12,6 @@ public class RegistroPedidos {
     private List<Pedido> enTransito;
     private List<Pedido> verificados;
     private int contadorPedidos;
-    private int contadorPedidoTransito;
     private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito, llaveVerificados;
     private volatile boolean despachoFinalizado;
     private volatile boolean entregaFinalizada;
@@ -26,7 +25,7 @@ public class RegistroPedidos {
         this.enTransito = new ArrayList<>();
         this.verificados = new ArrayList<>();
         contadorPedidos = 0;
-        contadorPedidoTransito = 0;
+
         //Llaves para sincronizar las listas
         this.llavePreparacion = new Object();
         this.llaveEntregados = new Object();
@@ -93,6 +92,27 @@ public class RegistroPedidos {
         }
     }
 
+
+
+    public Pedido removePedidoEntregado() {
+        synchronized (this.llaveEntregados) {
+
+            while(entregados.isEmpty()) {
+                try {
+                    System.out.println(Thread.currentThread().getName() + ": Esperando VERIFICAR un pedido entregado.");
+                    if (entregaFinalizada){
+                        throw new InterruptedException();
+
+                    }
+                    this.llaveEntregados.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt(); // buena práctica
+                    return null;
+                }
+            }
+            return entregados.remove(generadorNumAleatorio(entregados.size()));
+        }
+    }
 
 
     public void addPedidoEnTransito(Pedido pedido) {

@@ -176,7 +176,9 @@ public class EmpresaLogistica {
     verificados. En caso contrario, se elimina del registro de pedidos entregados y se inserta
     en el registro de pedidos fallidos. Este proceso es ejecutado por dos hilos. */
 
+ 
     public boolean verificarPedidosEntregados() {
+
         Pedido pedido = registrosPedidos.removePedidoEntregado();
         Random r = new Random();
         boolean verificado = r.nextInt(100)<95;
@@ -194,6 +196,7 @@ public class EmpresaLogistica {
 
             return true;
         }
+        return registrosPedidos.getCantidadFallidos() + registrosPedidos.getCantidadVerificados();
     }
 
     public RegistroPedidos getRegistrosPedidos() {

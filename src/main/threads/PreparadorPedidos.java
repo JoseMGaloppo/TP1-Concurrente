@@ -22,7 +22,6 @@ public class PreparadorPedidos extends Proceso implements Runnable {
                 this.pedido = generadorPedidos.tomarPedido();
             } catch (GeneradorVacioException e) {
                 System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para preparar. Finalizando ejecucion...");
-
                 return;
             }
 

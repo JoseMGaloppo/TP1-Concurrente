@@ -5,12 +5,16 @@ import main.threads.DespachadorPedidos;
 import main.threads.PreparadorPedidos;
 import main.threads.VerificadorPedidos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
 
         EmpresaLogistica almacen = new EmpresaLogistica();
         GeneradorPedidos generador = new GeneradorPedidos();
         long inicio = System.currentTimeMillis();
+        List<Thread> verificadores = new ArrayList<>();
 
         // HILO PARA EL LOGGER SE USA JOIN PARA QUE SE EJECUTE SOLO
         LogClass logger = new LogClass(almacen, inicio);
@@ -39,21 +43,23 @@ public class Main {
         for (int i = 1; i <= 2; i++) {
             Thread t = new Thread(new VerificadorPedidos(almacen), "Verificador " + i);
             t.start();
+            verificadores.add(t);
         }
 
+        try {
+            for (Thread t : verificadores) {
+                t.join();
+            }
+        } catch(InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
 
         logger.detener();
         try{
             loggerT.join();
-
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-
-
-
-
-
 
     }
 }

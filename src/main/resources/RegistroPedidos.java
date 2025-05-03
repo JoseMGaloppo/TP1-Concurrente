@@ -79,7 +79,7 @@ public class RegistroPedidos {
                         llavePreparacion.notifyAll();
                         throw new SinDespachosException(""); // Esto detendrá el hilo en el catch
                     }
-                    System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para despachar.");
+                    //System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para despachar.");
                     this.llavePreparacion.wait();
                 }
                 catch(InterruptedException e) {
@@ -87,7 +87,7 @@ public class RegistroPedidos {
                 }
             }
             contadorPedidos++;
-            System.out.println(this.contadorPedidos);
+            //System.out.println(this.contadorPedidos);
             return enPreparacion.remove(generadorNumAleatorio(enPreparacion.size()));
         }
     }
@@ -99,7 +99,7 @@ public class RegistroPedidos {
 
             while(entregados.isEmpty()) {
                 try {
-                    System.out.println(Thread.currentThread().getName() + ": Esperando VERIFICAR un pedido entregado.");
+                    //System.out.println(Thread.currentThread().getName() + ": Esperando VERIFICAR un pedido entregado.");
                     if (entregaFinalizada){
                         throw new InterruptedException();
 
@@ -118,7 +118,7 @@ public class RegistroPedidos {
     public void addPedidoEnTransito(Pedido pedido) {
         synchronized (this.llaveEnTransito) {
             enTransito.add(pedido);
-            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro en transito.");
+            //System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro en transito.");
             llaveEnTransito.notifyAll();
         }
     }
@@ -126,7 +126,7 @@ public class RegistroPedidos {
     public void procesoDespachoFin(){
         synchronized (this.llaveEnTransito) {
             this.despachadoresActivos--;
-            System.out.println("QUEDAN: " + this.despachadoresActivos + " trabajadores");
+            //System.out.println("QUEDAN: " + this.despachadoresActivos + " trabajadores");
             if(despachadoresActivos == 0) {
                 despachoFinalizado = true;
                 llaveEnTransito.notifyAll();
@@ -140,7 +140,7 @@ public class RegistroPedidos {
 
             while(enTransito.isEmpty()) {
                 try {
-                    System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para entregar.");
+                    //System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para entregar.");
                     if (despachoFinalizado){
                         throw new InterruptedException();
 
@@ -165,33 +165,13 @@ public class RegistroPedidos {
     public void procesoEntregaFin(){
         synchronized (this.llaveEntregados) {
             this.entregadoresActivos--;
-            System.out.println("QUEDAN: " + this.entregadoresActivos + " trabajadores");
+            //System.out.println("QUEDAN: " + this.entregadoresActivos + " trabajadores");
             if(entregadoresActivos == 0) {
                 entregaFinalizada = true;
                 llaveEntregados.notifyAll();
             }
         }
 
-    }
-
-    public Pedido removePedidoEntregado() {
-        synchronized (this.llaveEntregados) {
-
-            while(entregados.isEmpty()) {
-                try {
-                    System.out.println(Thread.currentThread().getName() + ": Esperando VERIFICAR un pedido entregado.");
-                    if (entregaFinalizada){
-                        throw new InterruptedException();
-
-                    }
-                    this.llaveEntregados.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt(); // buena práctica
-                    return null;
-                }
-            }
-            return entregados.remove(generadorNumAleatorio(entregados.size()));
-        }
     }
 
     public void addPedidoFallido(Pedido pedido) {

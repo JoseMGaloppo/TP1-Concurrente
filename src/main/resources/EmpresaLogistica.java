@@ -22,18 +22,20 @@ public class EmpresaLogistica {
                 casilleros[i][j] = new Casillero();
             }
         }
-
     }
 
-
-
-    /*
-    Métodos auxiliares
+    /**
+     * Genera un número aleatorio entre 0 y 100, y verifica si es menor al porcentaje
+     * @return true si el número es menor al porcentaje, false si no lo es
+     * @param porcentaje el porcentaje a comparar
      */
+    public boolean probabilidadDatos(double porcentaje) {
+        double numeroAleatorio = (Math.random());
+        return numeroAleatorio < porcentaje;
+    }
 
+    // --------------------------------Métodos para el proceso 1--------------------------------------------------------
 
-
-    // Métodos para el proceso 1
     public void prepararPedido(Pedido ped) {
         boolean casilleroEncontrado = false;
         Casillero casi = null;
@@ -71,7 +73,8 @@ public class EmpresaLogistica {
         this.registrosPedidos.addPedidoPreparacion(pedido);
     }
 
-    // Métodos para el proceso 2
+    // --------------------------------Métodos para el proceso 2--------------------------------------------------------
+
     /**
      * Verifica si la lista está vacía, en base al resultado se fija la probabilidad de que la información sea correcta, luego realiza los seteos
      * de estados y cambios entre listas necesarios.
@@ -81,7 +84,7 @@ public class EmpresaLogistica {
         Pedido pedido = registrosPedidos.removePedidoPreparacion();
         Casillero casi = obtenerCasillero(pedido);
 
-            if (probabilidadDatos()) {
+            if (probabilidadDatos(0.85)) {
                 registrosPedidos.registrarDespacho(pedido);
                 casi.desocupar();
             }
@@ -92,22 +95,12 @@ public class EmpresaLogistica {
     }
 
     /**
-     * Genera un número aleatorio entre 0 y 100, y verifica si es menor a 85
-     * @return true si el número es menor a 85, false si no lo es
-     */
-    public boolean probabilidadDatos() {
-        double numeroAleatorio = (Math.random());
-        return numeroAleatorio < 0.85;
-    }
-
-    /**
      * Obtiene el Casillero asociado a la posicion i, j de un pedido en especifico.
      * Param: ped el Pedido en el que se busca donde esta guardado
      * @return Casillero el casillero en donde esta metido ese Pedido
      * @param ped el pedido a obtener el casillero
      */
     public Casillero obtenerCasillero(Pedido ped) {
-
             int i = ped.getPosicion().getPosi();
             int j = ped.getPosicion().getPosj();
 
@@ -118,12 +111,7 @@ public class EmpresaLogistica {
     }
 
 
-    // Métodos para el proceso 3
-    /* Tres hilos se encargan de ejecutar este paso. Cada hilo selecciona un
-    pedido aleatorio del registro de pedidos en tránsito y con una probabilidad del 90%, lo
-    confirma. Si el pedido es confirmado, se elimina del registro de pedidos en tránsito y se
-    agrega al registro de pedidos entregados. Si el pedido no es confirmado, se elimina del
-    registro de pedidos en tránsito y se agrega al registro de pedidos fallidos. */
+    // --------------------------------Métodos para el proceso 3--------------------------------------------------------
 
     /**
      * Se entrega el pedido con un 90% de probabilidad de éxito.
@@ -137,26 +125,22 @@ public class EmpresaLogistica {
      */
 
     public boolean entregarPedido()  {
-        Random r = new Random();
-        boolean verificado = r.nextInt(100)<90;
-
         Pedido pedido = this.registrosPedidos.removePedidoEnTransito();
+
         if(pedido == null) {
             return false;
         }
         else {
-            if(verificado){
+            if(probabilidadDatos(0.90)) {
                 this.registrosPedidos.addPedidoEntregado(pedido);
             }
             else {
                 this.registrosPedidos.addPedidoFallido(pedido);
             }
-
             return true;
         }
 
     }
-
 
     public void procesoDespachoFin(){
         registrosPedidos.procesoDespachoFin();
@@ -167,36 +151,24 @@ public class EmpresaLogistica {
     }
 
 
-    // Métodos para el proceso 4
-    /* Al finalizar la ejecución, se debe verificar el estado final de los pedidos
-    para asegurar que las operaciones se hayan realizado correctamente. Este proceso
-    selecciona de manera aleatoria un pedido del registro de pedidos entregados, y con una
-    probabilidad del 95%, el pedido es verificado. Si el pedido fue verificado, se debe eliminar
-    del registro de pedidos entregados y se debe insertar en el registro de pedidos
-    verificados. En caso contrario, se elimina del registro de pedidos entregados y se inserta
-    en el registro de pedidos fallidos. Este proceso es ejecutado por dos hilos. */
+    // --------------------------------Métodos para el proceso 4--------------------------------------------------------
 
- 
+
     public boolean verificarPedidosEntregados() {
-
         Pedido pedido = registrosPedidos.removePedidoEntregado();
-        Random r = new Random();
-        boolean verificado = r.nextInt(100)<95;
 
         if(pedido == null) {
             return false;
         }
         else {
-            if(verificado){
+            if(probabilidadDatos(0.95)){
                 this.registrosPedidos.addPedidoVerificado(pedido);
             }
             else {
                 this.registrosPedidos.addPedidoFallido(pedido);
             }
-
             return true;
         }
-        return registrosPedidos.getCantidadFallidos() + registrosPedidos.getCantidadVerificados();
     }
 
     public RegistroPedidos getRegistrosPedidos() {

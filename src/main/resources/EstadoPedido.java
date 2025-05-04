@@ -8,7 +8,7 @@ public enum EstadoPedido {
 
     private String descripcion;
 
-    private EstadoPedido(String descripcion) {
+    EstadoPedido(String descripcion) {
         this.descripcion = descripcion;
     }
 }

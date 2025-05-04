@@ -83,7 +83,7 @@ public class RegistroPedidos {
                     this.llavePreparacion.wait();
                 }
                 catch(InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
             contadorPedidos++;

@@ -54,7 +54,7 @@ public class EmpresaLogistica {
      */
     public Casillero getCasilleroDisponible(Pedido pedido) {
         Random random = new Random();
-        int i = 0, j = 0;
+        int i, j;
         while(true) {
             i = random.nextInt(x); // fila aleatoria (0-19)
             j = random.nextInt(y); // columna aleatoria (0-9)
@@ -79,7 +79,6 @@ public class EmpresaLogistica {
     /**
      * Verifica si la lista está vacía, en base al resultado se fija la probabilidad de que la información sea correcta, luego realiza los seteos
      * de estados y cambios entre listas necesarios.
-     * @return true si hay pedidos en la lista y la informacion es correcta, false si la lista está vacía y la información es incorrecta
      */
     public void procesarDespacho() throws SinDespachosException {
         Pedido pedido = registrosPedidos.removePedidoPreparacion();
@@ -170,9 +169,5 @@ public class EmpresaLogistica {
             }
             return true;
         }
-    }
-
-    public RegistroPedidos getRegistrosPedidos() {
-        return registrosPedidos;
     }
 }

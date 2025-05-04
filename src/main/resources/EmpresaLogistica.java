@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class EmpresaLogistica {
     private final int x, y;
-    private Casillero[][] casilleros;
+    private final Casillero[][] casilleros;
     protected RegistroPedidos registrosPedidos;
 
 

@@ -28,7 +28,7 @@ public class DeliveryPedidos extends Proceso implements Runnable {
             try {
                 Thread.sleep(40); // espera antes de volver a intentar
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
 
         }

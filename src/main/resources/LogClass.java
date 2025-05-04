@@ -16,7 +16,6 @@ public class LogClass extends Proceso implements Runnable {
 
     public LogClass(EmpresaLogistica almacen, long tiempoInicio) {
         super(almacen);
-        //this.empresa = empresa;
         this.tiempoInicio = tiempoInicio;
         this.ruta = new File("Log.txt").getAbsolutePath();
         this.log = new File(ruta);

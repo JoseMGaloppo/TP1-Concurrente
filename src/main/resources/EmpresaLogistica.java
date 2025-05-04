@@ -171,8 +171,4 @@ public class EmpresaLogistica {
             return true;
         }
     }
-
-    public RegistroPedidos getRegistrosPedidos() {
-        return registrosPedidos;
-    }
 }

@@ -6,11 +6,11 @@ import java.util.Random;
 
 public class RegistroPedidos {
 
-    private List<Pedido> enPreparacion;
-    private List<Pedido> entregados;
-    private List<Pedido> fallidos;
-    private List<Pedido> enTransito;
-    private List<Pedido> verificados;
+    private final List<Pedido> enPreparacion;
+    private final List<Pedido> entregados;
+    private final List<Pedido> fallidos;
+    private final List<Pedido> enTransito;
+    private final List<Pedido> verificados;
     private int contadorPedidos;
     private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito, llaveVerificados;
     private volatile boolean despachoFinalizado;

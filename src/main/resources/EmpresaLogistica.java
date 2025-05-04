@@ -5,7 +5,7 @@ import java.util.Random;
 public class EmpresaLogistica {
     private final int x, y;
     private Casillero[][] casilleros;
-    private RegistroPedidos registrosPedidos;
+    protected RegistroPedidos registrosPedidos;
     private int hilosEnTransito;
 
 
@@ -36,6 +36,10 @@ public class EmpresaLogistica {
 
     // --------------------------------Métodos para el proceso 1--------------------------------------------------------
 
+    /**
+     * Este metodo se encarga de preparar un pedido, buscando un casillero disponible para guardar el pedido
+     * @param ped el pedido a preparar en el casillero
+     */
     public void prepararPedido(Pedido ped) {
         boolean casilleroEncontrado = false;
         Casillero casi = null;
@@ -47,11 +51,11 @@ public class EmpresaLogistica {
     }
 
     /**
-     * Este metodo encuentra un casillero que este VACIO, al encontrarlo
-     * modifica la PosicionCasillero en el pedido, y devuelve el casillero
-     * disponible
+     * Este metodo encuentra un casillero que este VACIO, al encontrarlo modifica la PosicionCasillero en el pedido, y devuelve el casillero disponible
+     * @param pedido el pedido a setear posición de casillero disponible
+     * @return el casillero que se encuentra disponible
      */
-    public Casillero getCasilleroDisponible(Pedido pediilo) {
+    public Casillero getCasilleroDisponible(Pedido pedido) {
         Random random = new Random();
         int i = 0, j = 0;
         while(true) {
@@ -59,7 +63,7 @@ public class EmpresaLogistica {
             j = random.nextInt(y); // columna aleatoria (0-9)
             Casillero casi = casilleros[i][j];
             if(casi.isDisponible()) {
-                pediilo.getPosicion().setPosicion(i, j);
+                pedido.getPosicion().setPosicion(i, j);
                 return casi;
             }
         }

@@ -102,7 +102,6 @@ public class RegistroPedidos {
                     //System.out.println(Thread.currentThread().getName() + ": Esperando VERIFICAR un pedido entregado.");
                     if (entregaFinalizada){
                         throw new InterruptedException();
-
                     }
                     this.llaveEntregados.wait();
                 } catch (InterruptedException e) {
@@ -143,7 +142,6 @@ public class RegistroPedidos {
                     //System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para entregar.");
                     if (despachoFinalizado){
                         throw new InterruptedException();
-
                     }
                     this.llaveEnTransito.wait();
                 } catch (InterruptedException e) {

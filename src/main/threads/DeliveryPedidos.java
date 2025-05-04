@@ -1,7 +1,6 @@
 package main.threads;
 
 import main.resources.EmpresaLogistica;
-import main.resources.SinTransitoException;
 
 public class DeliveryPedidos extends Proceso implements Runnable {
 

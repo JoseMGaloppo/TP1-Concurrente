@@ -11,7 +11,6 @@ public class LogClass extends Proceso implements Runnable {
     private final String ruta;
     private final File log;
     private FileWriter escritor;
-    //private final EmpresaLogistica empresa;
     private final long tiempoInicio;
     private boolean ejecutandose = true;
 

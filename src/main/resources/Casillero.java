@@ -6,7 +6,7 @@ public class Casillero {
     private int contadorOcupado;
     private Pedido pedido;
     // Llaves para secciones criticas
-    private final Object llaveOcupar, llaveDesocupar;
+    private final Object llaveOcupar;
 
 
     public Casillero() {
@@ -14,7 +14,6 @@ public class Casillero {
         this.contadorOcupado = 0;
         this.pedido = null;
         llaveOcupar = new Object();
-        llaveDesocupar = new Object();
     }
 
     public boolean isDisponible() {
@@ -56,7 +55,6 @@ public class Casillero {
     * En caso que no esté disponible, devuelve false.
     * @param pedido El pedido a colocar en el Casillero
     */
-
     public boolean ocupar(Pedido pedido) {
         synchronized(llaveOcupar) {
             if (isDisponible()) {
@@ -69,26 +67,16 @@ public class Casillero {
         return false;
     }
 
-    /* Este metodo originalmente devolvia un Pedido pero lo pase a void
-    * para que posea misma estructura que ocupar(), que primero pregunte
-    * si esta OCUPADO y luego actue, para que, si un Hilo llega al bloque
-    * synchronized, que cuando el hilo que llego primero termine, el segundo
-    * hilo no pase por el condicional, y se vaya a buscar otro Casillero.
-    * Ahora, no se como vamos a hacer para que el segundo hilo que llego,
-    * vuelva a buscar otro casillero.
-    * NO SE si vamos a tener que poner un while() dentro del run() o dentro
-    * del proceso en EmpresaLogistica para que vuelva a buscar en caso que
-    * choque con un Casillero que ya estaba siendo ocupado o desocupado */
-
-    //Posible llave al pedo (llaveDesocupar)
+    /* Intenta desocupar un casillero. Si esta 'OCUPADO', lo
+     * settea como 'VACIO' (para que pueda volver a ocuparse)
+     * y quita el pedido del Casillero.
+    */
     public void desocupar() {
-        //synchronized (llaveDesocupar) {
-            if(isOcupado()) {
-                setVacio();
-                System.out.println ("Se desocupo el casillero [" + this.pedido.getPosicion().getPosi() + "," + this.pedido.getPosicion().getPosj() + "]" );
-                //Pedido pedido = this.pedido;
-                this.pedido = null;
-            }
-        //}
+        if(isOcupado()) {
+            setVacio();
+            System.out.println ("Se desocupo el casillero [" + this.pedido.getPosicion().getPosi() + "," + this.pedido.getPosicion().getPosj() + "]" );
+            //Pedido pedido = this.pedido;
+            this.pedido = null;
+        }
     }
 }

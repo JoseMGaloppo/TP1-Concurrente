@@ -6,7 +6,6 @@ public class EmpresaLogistica {
     private final int x, y;
     private Casillero[][] casilleros;
     protected RegistroPedidos registrosPedidos;
-    private int hilosEnTransito;
 
 
     public EmpresaLogistica() {
@@ -14,8 +13,6 @@ public class EmpresaLogistica {
         this.y = 10; // 10
         casilleros = new Casillero[x][y];
         registrosPedidos = new RegistroPedidos();
-        hilosEnTransito = 2;
-
         //Creo e instancio los casilleros de la matriz casilleros
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {

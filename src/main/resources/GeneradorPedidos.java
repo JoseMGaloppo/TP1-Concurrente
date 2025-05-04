@@ -21,7 +21,6 @@ public class GeneradorPedidos {
         if(pedidos.size() == 0) {
             throw new GeneradorVacioException("");
         }
-
         return pedidos.removeFirst();
     }
 }

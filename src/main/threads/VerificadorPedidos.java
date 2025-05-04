@@ -9,5 +9,26 @@ public class VerificadorPedidos extends Proceso implements Runnable {
     }
 
     @Override
-    public void run() {}
+    public void run() {
+
+        while (true){
+            //System.out.println("Hilo: " + Thread.currentThread().getName() + " verificando pedidos entregados");
+
+            if(almacen.verificarPedidosEntregados()){
+                System.out.println("Hilo: " + Thread.currentThread().getName() + " verificando pedido");
+            }
+            else {
+                //System.out.println("No hay más pedidos para verificar");
+                System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para verificar. Finalizando ejecucion...");
+                return;
+            }
+
+            try {
+                Thread.sleep(200);
+            } catch(InterruptedException e) {
+               e.printStackTrace();
+
+            }
+        }
+    }
 }

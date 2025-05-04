@@ -5,13 +5,16 @@ import java.util.Random;
 public class EmpresaLogistica {
     private final int x, y;
     private Casillero[][] casilleros;
-    private RegistroPedidos registrosPedidos;
+    protected RegistroPedidos registrosPedidos;
+    private int hilosEnTransito;
+
 
     public EmpresaLogistica() {
         this.x = 20; // 20
         this.y = 10; // 10
         casilleros = new Casillero[x][y];
         registrosPedidos = new RegistroPedidos();
+        hilosEnTransito = 2;
 
         //Creo e instancio los casilleros de la matriz casilleros
         for (int i = 0; i < x; i++) {
@@ -19,10 +22,24 @@ public class EmpresaLogistica {
                 casilleros[i][j] = new Casillero();
             }
         }
-
     }
 
-    // Métodos para el proceso 1
+    /**
+     * Genera un número aleatorio entre 0 y 100, y verifica si es menor al porcentaje
+     * @return true si el número es menor al porcentaje, false si no lo es
+     * @param porcentaje el porcentaje a comparar
+     */
+    public boolean probabilidadDatos(double porcentaje) {
+        double numeroAleatorio = (Math.random());
+        return numeroAleatorio < porcentaje;
+    }
+
+    // --------------------------------Métodos para el proceso 1--------------------------------------------------------
+
+    /**
+     * Este metodo se encarga de preparar un pedido, buscando un casillero disponible para guardar el pedido
+     * @param ped el pedido a preparar en el casillero
+     */
     public void prepararPedido(Pedido ped) {
         boolean casilleroEncontrado = false;
         Casillero casi = null;
@@ -33,12 +50,12 @@ public class EmpresaLogistica {
         System.out.println(Thread.currentThread().getName() + " Ha preparado un pedido en" + " el casillero [" + casi.getPedido().getPosicion().getPosi() + "," + casi.getPedido().getPosicion().getPosj() + "]" + ". CONTADOR DE CASILLERO: " + casi.getContadorOcupado());
     }
 
-    /*
-     * Este metodo encuentra un casillero que este VACIO, al encontrarlo
-     * modifica la PosicionCasillero en el pedido, y devuelve el casillero
-     * disponible
+    /**
+     * Este metodo encuentra un casillero que este VACIO, al encontrarlo modifica la PosicionCasillero en el pedido, y devuelve el casillero disponible
+     * @param pedido el pedido a setear posición de casillero disponible
+     * @return el casillero que se encuentra disponible
      */
-    public Casillero getCasilleroDisponible(Pedido pediilo) {
+    public Casillero getCasilleroDisponible(Pedido pedido) {
         Random random = new Random();
         int i = 0, j = 0;
         while(true) {
@@ -46,7 +63,7 @@ public class EmpresaLogistica {
             j = random.nextInt(y); // columna aleatoria (0-9)
             Casillero casi = casilleros[i][j];
             if(casi.isDisponible()) {
-                pediilo.getPosicion().setPosicion(i, j);
+                pedido.getPosicion().setPosicion(i, j);
                 return casi;
             }
         }
@@ -60,7 +77,8 @@ public class EmpresaLogistica {
         this.registrosPedidos.addPedidoPreparacion(pedido);
     }
 
-    // Métodos para el proceso 2
+    // --------------------------------Métodos para el proceso 2--------------------------------------------------------
+
     /**
      * Verifica si la lista está vacía, en base al resultado se fija la probabilidad de que la información sea correcta, luego realiza los seteos
      * de estados y cambios entre listas necesarios.
@@ -70,7 +88,7 @@ public class EmpresaLogistica {
         Pedido pedido = registrosPedidos.removePedidoPreparacion();
         Casillero casi = obtenerCasillero(pedido);
 
-            if (probabilidadDatos()) {
+            if (probabilidadDatos(0.85)) {
                 registrosPedidos.registrarDespacho(pedido);
                 casi.desocupar();
             }
@@ -81,22 +99,12 @@ public class EmpresaLogistica {
     }
 
     /**
-     * Genera un número aleatorio entre 0 y 100, y verifica si es menor a 85
-     * @return true si el número es menor a 85, false si no lo es
-     */
-    public boolean probabilidadDatos() {
-        double numeroAleatorio = (Math.random());
-        return numeroAleatorio < 0.85;
-    }
-
-    /**
      * Obtiene el Casillero asociado a la posicion i, j de un pedido en especifico.
      * Param: ped el Pedido en el que se busca donde esta guardado
      * @return Casillero el casillero en donde esta metido ese Pedido
      * @param ped el pedido a obtener el casillero
      */
     public Casillero obtenerCasillero(Pedido ped) {
-
             int i = ped.getPosicion().getPosi();
             int j = ped.getPosicion().getPosj();
 
@@ -107,21 +115,65 @@ public class EmpresaLogistica {
     }
 
 
-    // Métodos para el proceso 3
-    /* Tres hilos se encargan de ejecutar este paso. Cada hilo selecciona un
-    pedido aleatorio del registro de pedidos en tránsito y con una probabilidad del 90%, lo
-    confirma. Si el pedido es confirmado, se elimina del registro de pedidos en tránsito y se
-    agrega al registro de pedidos entregados. Si el pedido no es confirmado, se elimina del
-    registro de pedidos en tránsito y se agrega al registro de pedidos fallidos. */
+    // --------------------------------Métodos para el proceso 3--------------------------------------------------------
 
-    // Métodos para el proceso 4
-    /* Al finalizar la ejecución, se debe verificar el estado final de los pedidos
-    para asegurar que las operaciones se hayan realizado correctamente. Este proceso
-    selecciona de manera aleatoria un pedido del registro de pedidos entregados, y con una
-    probabilidad del 95%, el pedido es verificado. Si el pedido fue verificado, se debe eliminar
-    del registro de pedidos entregados y se debe insertar en el registro de pedidos
-    verificados. En caso contrario, se elimina del registro de pedidos entregados y se inserta
-    en el registro de pedidos fallidos. Este proceso es ejecutado por dos hilos. */
+    /**
+     * Se entrega el pedido con un 90% de probabilidad de éxito.
+     *
+     * <p>Si la entrega es exitosa, el pedido se mueve desde el registro de
+     * pedidos en tránsito al registro de pedidos entregados. Si falla, se
+     * mueve al registro de pedidos fallidos.
+     * Solo se realiza la entrega si la lista de pedidos en tránsito no está vacía
+     *
+     * @return boolean
+     */
+
+    public boolean entregarPedido()  {
+        Pedido pedido = this.registrosPedidos.removePedidoEnTransito();
+
+        if(pedido == null) {
+            return false;
+        }
+        else {
+            if(probabilidadDatos(0.90)) {
+                this.registrosPedidos.addPedidoEntregado(pedido);
+            }
+            else {
+                this.registrosPedidos.addPedidoFallido(pedido);
+            }
+            return true;
+        }
+
+    }
+
+    public void procesoDespachoFin(){
+        registrosPedidos.procesoDespachoFin();
+    }
+
+    public void procesoEntregaFin(){
+        registrosPedidos.procesoEntregaFin();
+    }
+
+
+    // --------------------------------Métodos para el proceso 4--------------------------------------------------------
+
+
+    public boolean verificarPedidosEntregados() {
+        Pedido pedido = registrosPedidos.removePedidoEntregado();
+
+        if(pedido == null) {
+            return false;
+        }
+        else {
+            if(probabilidadDatos(0.95)){
+                this.registrosPedidos.addPedidoVerificado(pedido);
+            }
+            else {
+                this.registrosPedidos.addPedidoFallido(pedido);
+            }
+            return true;
+        }
+    }
 
     public RegistroPedidos getRegistrosPedidos() {
         return registrosPedidos;

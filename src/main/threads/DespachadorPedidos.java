@@ -32,13 +32,15 @@ public class DespachadorPedidos extends Proceso implements Runnable {
                 almacen.procesarDespacho();
             } catch (SinDespachosException e) {
                 System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para despachar. Finalizando ejecucion...");
+                almacen.procesoDespachoFin();
                 return;
             }
             try{
-                Thread.sleep(12);
+                Thread.sleep(30);
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
+
             }
 
         }

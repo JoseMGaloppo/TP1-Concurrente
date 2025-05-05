@@ -40,13 +40,13 @@ public class LogClass extends Proceso implements Runnable {
 
     @Override
     public void run() {
-        try { //lo ejecuto asi por el join
-            escritor = new FileWriter(log, true); //escribe en en el log.text
+        try {
+            escritor = new FileWriter(log, true); //escribe en el log.text
 
             while (ejecutandose) {
-                int fallidos = almacen.registrosPedidos.getCantidadFallidos(); //Se puede Reeemplazar ambos por unos metodos
+                int fallidos = almacen.registrosPedidos.getCantidadFallidos();
                 int verificados = almacen.registrosPedidos.getCantidadVerificados();
-                //que de la cantidad de verificados y fallidos de las listas que se ejecutan en los propios procesos
+
 
                 escritor.write("FALLIDOS: " + fallidos + " | VERIFICADOS: " + verificados + "\n");
                 escritor.flush(); //El flush este te fuerza que se escriba rapidamente
@@ -58,7 +58,7 @@ public class LogClass extends Proceso implements Runnable {
                     break;
                 }
             }
-            //escritor.write("\n--- ESTADISTICAS FINALES DE PEDIDOS ---\n");
+
 
 
 
@@ -114,8 +114,7 @@ public class LogClass extends Proceso implements Runnable {
                     fueraDeServicio++;
                 }
             }
-        } //este for se puede reemplar directamente imprimiendo los size de las listas
-        //porque aqui lo que se hace es recorrer otra vez pero no hace falta
+        }
 
         try{
             escritor.write("Casilleros vacíos: " + vacios + "\n");

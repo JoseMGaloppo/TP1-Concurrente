@@ -5,6 +5,7 @@ public class Casillero {
     private EstadoCasillero estado;
     private int contadorOcupado;
     private Pedido pedido;
+
     // Llaves para secciones criticas
     private final Object llaveOcupar;
 
@@ -48,7 +49,8 @@ public class Casillero {
     public EstadoCasillero getEstado() {
         return this.estado;
     }
-    /*
+
+    /**
     * Intenta ocupar el casillero. Si esta disponible,
     * lo settea como ocupado, añade el pedido al Casillero,
     * suma 1 al contador y devuelve True.
@@ -67,7 +69,7 @@ public class Casillero {
         return false;
     }
 
-    /* Intenta desocupar un casillero. Si esta 'OCUPADO', lo
+    /** Intenta desocupar un casillero. Si esta 'OCUPADO', lo
      * settea como 'VACIO' (para que pueda volver a ocuparse)
      * y quita el pedido del Casillero.
     */

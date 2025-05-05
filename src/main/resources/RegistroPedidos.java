@@ -6,17 +6,25 @@ import java.util.Random;
 
 public class RegistroPedidos {
 
+    //Listas
     private final List<Pedido> enPreparacion;
     private final List<Pedido> entregados;
     private final List<Pedido> fallidos;
     private final List<Pedido> enTransito;
     private final List<Pedido> verificados;
+
+    //Variables de señal
     private int contadorPedidos;
-    private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito, llaveVerificados;
-    private volatile boolean despachoFinalizado;
-    private volatile boolean entregaFinalizada;
     private int despachadoresActivos;
     private int entregadoresActivos;
+
+    //Llaves
+    private final Object llavePreparacion, llaveEntregados, llaveFallidos, llaveEnTransito, llaveVerificados;
+
+    //Flags
+    private volatile boolean despachoFinalizado;
+    private volatile boolean entregaFinalizada;
+
 
     public RegistroPedidos() {
         this.enPreparacion = new ArrayList<>();
@@ -26,7 +34,7 @@ public class RegistroPedidos {
         this.verificados = new ArrayList<>();
         contadorPedidos = 0;
 
-        //Llaves para sincronizar las listas
+
         this.llavePreparacion = new Object();
         this.llaveEntregados = new Object();
         this.llaveFallidos = new Object();
@@ -37,6 +45,11 @@ public class RegistroPedidos {
         entregaFinalizada = false;
         despachadoresActivos = 2;
         entregadoresActivos = 3;
+    }
+
+    public int generadorNumAleatorio(int size) {
+        Random random = new Random();
+        return random.nextInt(size);
     }
 
     /**
@@ -57,19 +70,35 @@ public class RegistroPedidos {
         pedido.setEstado(EstadoPedido.FALLIDO);
     }
 
-    public int generadorNumAleatorio(int size) {
-        Random random = new Random();
-        return random.nextInt(size);
-    }
-
-
+    /**
+     * Agrega un pedido a la lista de pedidos en preparación.
+     *
+     * <p>Este metodo está sincronizado con una llave específica para evitar condiciones de carrera
+     * al acceder a la lista compartida.
+     * Se utiliza {@code notifyAll()} para despertar a todos los hilos que estén esperando
+     * sobre la llave llavePreparación
+     * </p>
+     * @param pedido El pedido que se va a agregar a la lista de preparación.
+     */
     public void addPedidoPreparacion(Pedido pedido) {
         synchronized (this.llavePreparacion) {
             enPreparacion.add(pedido);
-            llavePreparacion.notifyAll(); //notify o notifyAll??
+            llavePreparacion.notifyAll();
         }
     }
 
+
+    /**
+     * Remueve y retorna un pedido aleatorio de la lista de pedidos en preparación.
+     * Si la lista está vacía, el hilo esperará hasta que haya elementos disponibles.
+     * Si el contador de pedidos alcanza los 500 y no hay más pedidos por procesar,
+     * se lanza una {@code SinDespachosException} para indicar que no habrá más despachos.
+     * Este metodo está sincronizado para garantizar que solo un hilo acceda a la lista
+     * de preparación a la vez, evitando condiciones de carrera.
+     *
+     * @return Pedido
+     * @throws SinDespachosException
+     */
     public Pedido removePedidoPreparacion() throws SinDespachosException {
         synchronized (this.llavePreparacion) {
             while(enPreparacion.isEmpty()) {
@@ -92,28 +121,16 @@ public class RegistroPedidos {
         }
     }
 
-
-
-    public Pedido removePedidoEntregado() {
-        synchronized (this.llaveEntregados) {
-
-            while(entregados.isEmpty()) {
-                try {
-                    //System.out.println(Thread.currentThread().getName() + ": Esperando VERIFICAR un pedido entregado.");
-                    if (entregaFinalizada){
-                        throw new InterruptedException();
-                    }
-                    this.llaveEntregados.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt(); // buena práctica
-                    return null;
-                }
-            }
-            return entregados.remove(generadorNumAleatorio(entregados.size()));
-        }
-    }
-
-
+    /**
+     * Agrega un pedido a la lista de pedidos en tránsito.
+     *
+     * <p>Este metodo está sincronizado utilizando {@code llaveEnTransito} para asegurar
+     * que el acceso concurrente a la lista {@code enTransito} sea seguro y consistente entre múltiples hilos.
+     * Luego de agregar el pedido, se llama a {@code notifyAll()} para despertar a todos los hilos que
+     * pudieran estar esperando a que haya elementos disponibles en la lista.</p>
+     *
+     * @param pedido
+     */
     public void addPedidoEnTransito(Pedido pedido) {
         synchronized (this.llaveEnTransito) {
             enTransito.add(pedido);
@@ -122,18 +139,18 @@ public class RegistroPedidos {
         }
     }
 
-    public void procesoDespachoFin(){
-        synchronized (this.llaveEnTransito) {
-            this.despachadoresActivos--;
-            //System.out.println("QUEDAN: " + this.despachadoresActivos + " trabajadores");
-            if(despachadoresActivos == 0) {
-                despachoFinalizado = true;
-                llaveEnTransito.notifyAll();
-            }
-        }
 
-    }
-
+    /**
+     * Remueve y retorna un pedido de la lista de pedidos en tránsito.
+     *
+     * <p>Este metodo está sincronizado sobre {@code llaveEnTransito} para garantizar la seguridad
+     * en el acceso concurrente a la lista {@code enTransito}.
+     * Si la lista está vacía, el hilo esperará usando {@code wait()} hasta que se agregue un nuevo pedido
+     * o hasta que se detecte que el proceso de despacho ha finalizado, en cuyo caso se interrumpe
+     * el hilo y se retorna {@code null}.</p>
+     *
+     * @return Pedido
+     */
     public Pedido removePedidoEnTransito() {
         synchronized (this.llaveEnTransito) {
 
@@ -153,6 +170,16 @@ public class RegistroPedidos {
         }
     }
 
+    /**
+     * Agrega un pedido a la lista de pedidos entregados.
+     *
+     * <p>Este metodo está sincronizado sobre {@code llaveEntregados} para garantizar
+     * el acceso seguro en entornos concurrentes. Una vez agregado el pedido,
+     * se notifica a todos los hilos que pudieran estar esperando sobre {@code llaveEntregados}
+     * mediante {@code notifyAll()}.</p>
+     *
+     * @param pedido
+     */
     public void addPedidoEntregado(Pedido pedido) {
         synchronized (this.llaveEntregados) {
             entregados.add(pedido);
@@ -160,6 +187,102 @@ public class RegistroPedidos {
         }
     }
 
+
+    /**
+     * Extrae aleatoriamente un pedido de la lista de pedidos entregados.
+     *
+     * <p>Este metodo está sincronizado sobre {@code llaveEntregados} para asegurar el acceso
+     * concurrente seguro. Si la lista está vacía, el hilo esperará hasta que se agregue
+     * un nuevo pedido o hasta que se indique que el proceso de entrega ha finalizado.
+     * Si {@code entregaFinalizada} es verdadero y la lista está vacía, se lanza una
+     * interrupcion y el metodo retornará {@code null}.</p>
+     *
+     * @return Pedido
+     */
+    public Pedido removePedidoEntregado() {
+        synchronized (this.llaveEntregados) {
+
+            while(entregados.isEmpty()) {
+                try {
+                    //System.out.println(Thread.currentThread().getName() + ": Esperando VERIFICAR un pedido entregado.");
+                    if (entregaFinalizada){
+                        throw new InterruptedException();
+                    }
+                    this.llaveEntregados.wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt(); // buena práctica
+                    return null;
+                }
+            }
+            return entregados.remove(generadorNumAleatorio(entregados.size()));
+        }
+    }
+
+    /**
+     * Agrega un pedido a la lista de fallidos.
+     *
+     * <p>Este metodo está sincronizado sobre {@code llaveFallidos} para garantizar
+     * el acceso seguro en entornos concurrentes.</p>
+     *
+     * @param pedido
+     */
+    public void addPedidoFallido(Pedido pedido) {
+        synchronized (this.llaveFallidos) {
+            fallidos.add(pedido);
+            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de fallidos.");
+            //llaveFallidos.notifyAll();
+        }
+    }
+
+
+    /**
+     * Agrega un pedido a la lista de verificados.
+     *
+     * <p>Este metodo está sincronizado sobre {@code llaveVerificados} para garantizar
+     * el acceso seguro en entornos concurrentes.</p>
+     *
+     * @param pedido
+     */
+    public void addPedidoVerificado(Pedido pedido) {
+        synchronized (this.llaveVerificados) {
+            verificados.add(pedido);
+            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de verificados.");
+            llaveVerificados.notifyAll();
+        }
+    }
+
+    /**
+     * Marca la finalización del proceso de despacho.
+     *
+     * <p>Este metodo debe ser llamado por cada hilo despachador cuando termina su ejecución.
+     * Disminuye el contador de despachadores activos y, si este llega a cero, establece la bandera
+     * {@code despachoFinalizado} en {@code true} y notifica a los hilos que puedan estar esperando
+     * pedidos en tránsito.
+     * El metodo está sincronizado sobre {@code llaveEnTransito} para garantizar acceso exclusivo
+     * a la variable compartida {@code despachadoresActivos} y a la bandera {@code despachoFinalizado}.</p>
+     */
+    public void procesoDespachoFin(){
+        synchronized (this.llaveEnTransito) {
+            this.despachadoresActivos--;
+            //System.out.println("QUEDAN: " + this.despachadoresActivos + " trabajadores");
+            if(despachadoresActivos == 0) {
+                despachoFinalizado = true;
+                llaveEnTransito.notifyAll();
+            }
+        }
+
+    }
+
+    /**
+     * Marca la finalización del proceso de entrega.
+     *
+     * <p>Este metodo debe ser llamado por cada hilo entregador cuando termina su ejecución.
+     * Disminuye el contador de entregadores activos y, si este llega a cero, establece la bandera
+     * {@code entregaFinalizada} en {@code true} y notifica a los hilos que puedan estar esperando
+     * pedidos entregados.
+     * El metodo está sincronizado sobre {@code llaveEntregados} para garantizar acceso exclusivo
+     * a la variable compartida {@code entregadoresActivos} y a la bandera {@code entregadoresActivos}.</p>
+     */
     public void procesoEntregaFin(){
         synchronized (this.llaveEntregados) {
             this.entregadoresActivos--;
@@ -170,22 +293,6 @@ public class RegistroPedidos {
             }
         }
 
-    }
-
-    public void addPedidoFallido(Pedido pedido) {
-        synchronized (this.llaveFallidos) {
-            fallidos.add(pedido);
-            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de fallidos.");
-            llaveFallidos.notifyAll();
-        }
-    }
-
-    public void addPedidoVerificado(Pedido pedido) {
-        synchronized (this.llaveVerificados) {
-            verificados.add(pedido);
-            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de verificados.");
-            llaveVerificados.notifyAll();
-        }
     }
 
     public int getCantidadFallidos() {

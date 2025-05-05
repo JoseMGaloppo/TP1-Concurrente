@@ -16,7 +16,12 @@ public class GeneradorPedidos {
         }
     }
 
-    // Método sincronizado para tomar un pedido
+    /**
+     * Toma el primer elemento de la lista pedidos.
+     *
+     * @return Pedido
+     * @throws GeneradorVacioException
+     */
     public synchronized Pedido tomarPedido() throws GeneradorVacioException {
         if(pedidos.size() == 0) {
             throw new GeneradorVacioException("");

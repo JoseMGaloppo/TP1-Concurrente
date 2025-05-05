@@ -12,18 +12,14 @@ public class DeliveryPedidos extends Proceso implements Runnable {
     public void run() {
         while (true) {
 
-
-
             if(almacen.entregarPedido()){
                 System.out.println("Hilo: " + Thread.currentThread().getName() + " entregando pedido");
             }
             else {
-                //System.out.println("No hay más pedidos para entregar");
                 System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para entregar. Finalizando ejecucion...");
                 almacen.procesoEntregaFin();
                 return;
             }
-
 
             try {
                 Thread.sleep(80); // espera antes de volver a intentar

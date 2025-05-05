@@ -48,9 +48,10 @@ public class EmpresaLogistica {
     }
 
     /**
-     * Este metodo encuentra un casillero que este VACIO, al encontrarlo modifica la PosicionCasillero en el pedido, y devuelve el casillero disponible
+     * Este metodo encuentra un casillero que este VACIO, al encontrarlo modifica la PosicionCasillero
+     * en el pedido, y devuelve el casillero disponible.
      * @param pedido el pedido a setear posición de casillero disponible
-     * @return el casillero que se encuentra disponible
+     * @return Casillero
      */
     public Casillero getCasilleroDisponible(Pedido pedido) {
         Random random = new Random();
@@ -66,9 +67,7 @@ public class EmpresaLogistica {
         }
     }
 
-    public Casillero[][] getCasilleros() {
-        return casilleros;
-    }
+    public Casillero[][] getCasilleros() { return casilleros; }
 
     public void registrarPedidoPreparacion(Pedido pedido) {
         this.registrosPedidos.addPedidoPreparacion(pedido);
@@ -119,7 +118,7 @@ public class EmpresaLogistica {
      * <p>Si la entrega es exitosa, el pedido se mueve desde el registro de
      * pedidos en tránsito al registro de pedidos entregados. Si falla, se
      * mueve al registro de pedidos fallidos.
-     * Solo se realiza la entrega si la lista de pedidos en tránsito no está vacía
+     * Solo se realiza la entrega si la lista de pedidos en tránsito no está vacía</p>
      *
      * @return boolean
      */

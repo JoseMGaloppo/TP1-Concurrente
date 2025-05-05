@@ -189,11 +189,15 @@ public class RegistroPedidos {
     }
 
     public int getCantidadFallidos() {
-        return fallidos.size();
+        synchronized (this.llaveFallidos) {
+            return fallidos.size();
+        }
     }
 
     public int getCantidadVerificados() {
-        return verificados.size();
+        synchronized (this.llaveVerificados) {
+            return verificados.size();
+        }
 
     }
 

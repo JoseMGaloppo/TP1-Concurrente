@@ -27,7 +27,7 @@ public class DespachadorPedidos extends Proceso implements Runnable {
                 return;
             }
             try{
-                Thread.sleep(30);
+                Thread.sleep(10);
             }
             catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

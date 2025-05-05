@@ -24,7 +24,7 @@ public class VerificadorPedidos extends Proceso implements Runnable {
             }
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(90);
             } catch(InterruptedException e) {
                Thread.currentThread().interrupt();
 

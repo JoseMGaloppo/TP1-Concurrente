@@ -8,7 +8,6 @@ public class DespachadorPedidos extends Proceso implements Runnable {
         super(almacen);
     }
 
-
     @Override
     public void run() {
         while (true) {
@@ -20,7 +19,7 @@ public class DespachadorPedidos extends Proceso implements Runnable {
                 return;
             }
             try{
-                Thread.sleep(10);
+                Thread.sleep(30);
             }
             catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

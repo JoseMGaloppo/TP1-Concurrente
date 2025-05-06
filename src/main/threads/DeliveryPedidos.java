@@ -13,7 +13,7 @@ public class DeliveryPedidos extends Proceso implements Runnable {
         while (true) {
 
             if(almacen.entregarPedido()){
-                System.out.println("Hilo: " + Thread.currentThread().getName() + " entregando pedido");
+                System.out.println(Thread.currentThread().getName() + ": entregando pedido");
             }
             else {
                 System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para entregar. Finalizando ejecucion...");
@@ -21,8 +21,9 @@ public class DeliveryPedidos extends Proceso implements Runnable {
                 return;
             }
 
+
             try {
-                Thread.sleep(80); // espera antes de volver a intentar
+                Thread.sleep(120); // espera antes de volver a intentar
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

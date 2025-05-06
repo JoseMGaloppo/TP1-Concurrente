@@ -12,8 +12,9 @@ public class VerificadorPedidos extends Proceso implements Runnable {
     public void run() {
 
         while (true){
+
             if(almacen.verificarPedidosEntregados()){
-                System.out.println("Hilo: " + Thread.currentThread().getName() + " verificando pedido");
+                System.out.println(Thread.currentThread().getName() + ": Verificando pedido");
             }
             else {
                 System.out.println(Thread.currentThread().getName() + ": Ya no hay mas pedidos para verificar. Finalizando ejecucion...");
@@ -21,7 +22,7 @@ public class VerificadorPedidos extends Proceso implements Runnable {
             }
 
             try {
-                Thread.sleep(90);
+                Thread.sleep(20);
             } catch(InterruptedException e) {
                Thread.currentThread().interrupt();
 

@@ -108,7 +108,7 @@ public class RegistroPedidos {
                         llavePreparacion.notifyAll();
                         throw new SinDespachosException(""); // Esto detendrá el hilo en el catch
                     }
-                    //System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para despachar.");
+                    System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para despachar.");
                     this.llavePreparacion.wait();
                 }
                 catch(InterruptedException e) {
@@ -134,7 +134,7 @@ public class RegistroPedidos {
     public void addPedidoEnTransito(Pedido pedido) {
         synchronized (this.llaveEnTransito) {
             enTransito.add(pedido);
-            //System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro en transito.");
+            System.out.println(Thread.currentThread().getName() + ": Agregando el pedido " + pedido + " al registro en transito.");
             llaveEnTransito.notifyAll();
         }
     }
@@ -156,7 +156,7 @@ public class RegistroPedidos {
 
             while(enTransito.isEmpty()) {
                 try {
-                    //System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para entregar.");
+                    System.out.println(Thread.currentThread().getName() + ": Esperando pedidos para entregar.");
                     if (despachoFinalizado){
                         throw new InterruptedException();
                     }
@@ -183,6 +183,7 @@ public class RegistroPedidos {
     public void addPedidoEntregado(Pedido pedido) {
         synchronized (this.llaveEntregados) {
             entregados.add(pedido);
+            System.out.println (Thread.currentThread().getName() + ": Agregó pedido entregado " + pedido.toString() + " a la lista de pedidos entregados");
             llaveEntregados.notifyAll();
         }
     }
@@ -204,7 +205,7 @@ public class RegistroPedidos {
 
             while(entregados.isEmpty()) {
                 try {
-                    //System.out.println(Thread.currentThread().getName() + ": Esperando VERIFICAR un pedido entregado.");
+                    System.out.println(Thread.currentThread().getName() + ": Esperando verificar un pedido entregado.");
                     if (entregaFinalizada){
                         throw new InterruptedException();
                     }
@@ -229,7 +230,7 @@ public class RegistroPedidos {
     public void addPedidoFallido(Pedido pedido) {
         synchronized (this.llaveFallidos) {
             fallidos.add(pedido);
-            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de fallidos.");
+            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido.toString() + " al registro de fallidos.");
             //llaveFallidos.notifyAll();
         }
     }
@@ -246,7 +247,7 @@ public class RegistroPedidos {
     public void addPedidoVerificado(Pedido pedido) {
         synchronized (this.llaveVerificados) {
             verificados.add(pedido);
-            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido + " al registro de verificados.");
+            System.out.println(Thread.currentThread().getName() + ": Agregando pedido " + pedido.toString() + " al registro de verificados.");
             llaveVerificados.notifyAll();
         }
     }

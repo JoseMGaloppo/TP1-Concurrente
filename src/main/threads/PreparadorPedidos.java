@@ -26,11 +26,11 @@ public class PreparadorPedidos extends Proceso implements Runnable {
             }
 
             try{
-                Thread.sleep(10);
+                Thread.sleep(40);
                 almacen.prepararPedido(this.pedido);
-                Thread.sleep(10);
+                Thread.sleep(40);
                 almacen.registrarPedidoPreparacion(this.pedido);
-                Thread.sleep(10);
+                Thread.sleep(20);
             } catch(InterruptedException e) {
                 Thread.currentThread().interrupt();
 

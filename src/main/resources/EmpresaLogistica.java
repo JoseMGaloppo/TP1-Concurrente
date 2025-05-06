@@ -44,7 +44,7 @@ public class EmpresaLogistica {
             casi = getCasilleroDisponible(ped);
             casilleroEncontrado = casi.ocupar(ped);
         }
-        System.out.println(Thread.currentThread().getName() + " Ha preparado un pedido en" + " el casillero [" + casi.getPedido().getPosicion().getPosi() + "," + casi.getPedido().getPosicion().getPosj() + "]" + ". CONTADOR DE CASILLERO: " + casi.getContadorOcupado());
+        System.out.println(Thread.currentThread().getName() + " Ha preparado un pedido " + casi.getPedido().toString()+ " en" + " el casillero [" + casi.getPedido().getPosicion().getPosi() + "," + casi.getPedido().getPosicion().getPosj() + "]" + ". CONTADOR DE CASILLERO: " + casi.getContadorOcupado());
     }
 
     /**
